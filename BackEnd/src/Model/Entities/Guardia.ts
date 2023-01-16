@@ -1,38 +1,33 @@
-package hospiolot.model.business.entities;
+import Entity from "./Entity";
+import Categoria from "./Categoria";
+import Unitat from "./Unitat";
+import Torn from "./Torn";
+import Treballador from "./Treballador";
 
-import hospiolot.model.persistence.dao.implementations.JDBCTreballadorFaGuardiaDAO;
-import hospiolot.model.persistence.exception.DAOException;
-import java.util.ArrayList;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.List;
+class Guardia extends Entity {
 
-public class Guardia extends Entity {
+//    static JDBCTreballadorFaGuardiaDAO trebunitdao = new JDBCTreballadorFaGuardiaDAO();
 
-    static JDBCTreballadorFaGuardiaDAO trebunitdao = new JDBCTreballadorFaGuardiaDAO();
+    private c:Categoria;
+    private u:Unitat;
+    private t:Torn;
+    private data:Date;
+    private placesACobrir:number;
+    private coberta:boolean;
+    private treballadors:Array<Treballador> ;
 
-    public Guardia(Categoria c, Unitat u, Torn t, Byte placesCobrir) {
-        this.c = c;
-        this.u = u;
-        this.t = t;
-        this.placesACobrir = placesCobrir;
+
+    public constructor () {
+        super();
+
     }
 
-    private Categoria c;
-    private Unitat u;
-    private Torn t;
-    private LocalDate data;
-    private Byte placesACobrir;
-    private Boolean coberta;
-    private List<Treballador> treballadors;
-
-    public List<Treballador> getTreballadors() throws DAOException {
+    public getTreballadors():Array<Treballador> | Error {
       
-            return trebunitdao.getTreballadors(this.getID());
-        
+        return trebunitdao.getTreballadors(this.getID());
     }
 
-    public Boolean getCoberta() throws DAOException {
+    public getCoberta():Boolean {
         if (this.getTreballadors()==null) {
             return true;
         } else {
@@ -41,14 +36,18 @@ public class Guardia extends Entity {
 
     }
 
-    public void setCoberta(Boolean isCoberta) {
+    public setCoberta(isCoberta:boolean):void {
         this.coberta = isCoberta;
     }
 
-    public Guardia() {
+  
+    
+    public Guardia(c:Categoria, u:Unitat, t:Torn, placesCobrir:number):void {
+        this.c = c;
+        this.u = u;
+        this.t = t;
+        this.placesACobrir = placesCobrir;
     }
-
-    ;
     
     public Guardia(long id, Categoria c, Unitat u, Torn t, LocalDate data, Byte placesCobrir) {
         this.setID(id);
