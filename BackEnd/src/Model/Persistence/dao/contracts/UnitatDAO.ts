@@ -1,9 +1,8 @@
+import Unitat from "../../../Entities/Unitat";
+import DAO from "./DAO";
 
-package hospiolot.model.persistence.dao.contracts;
-
-import hospiolot.model.business.entities.Unitat;
-import hospiolot.model.persistence.dao.contracts.DAO;
-
-public interface UnitatDAO  extends DAO<Unitat>{
+interface UnitatDAO  extends DAO<Unitat>{
     
 }
+
+export = UnitatDAO;

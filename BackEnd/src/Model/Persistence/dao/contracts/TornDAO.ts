@@ -1,10 +1,8 @@
+import Torn from "../../../Entities/Torn";
+import DAO from "./DAO";
 
-package hospiolot.model.persistence.dao.contracts;
-
-import hospiolot.model.business.entities.Torn;
-import hospiolot.model.persistence.dao.contracts.DAO;
-
-
-public interface TornDAO extends DAO<Torn>{
+interface TornDAO extends DAO<Torn>{
     
 }
+
+export = TornDAO;
