@@ -25,13 +25,6 @@ class Treballador extends Entity {
         }
     }
 
-
-
-
-    public getRol(): string {
-        return this.rol;
-    }
-
     public setRol(rol: string): void {
         this.rol = rol;
     }
