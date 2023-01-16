@@ -1,98 +1,81 @@
 import Entity from "./Entity";
 import Categoria from "./Categoria";
+import Guardia from "./Guardia";
+class Treballador extends Entity {
+    private nom: string;
+    private DNI: string;
+    private categoria: Categoria;
+    private qGuardiesTreballades: number;
+    private guardies: Array<Guardia> = new Array<>();
+    private rol: string;
+    static treballadordao: JDBCTreballadorDAO = new JDBCTreballadorDAO();
+    static trebunitdao: JDBCTreballadorFaGuardiaDAO = new JDBCTreballadorFaGuardiaDAO();
 
-class Treballador {
+    constructor(nom: string, DNI: string, categoria: Categoria, rol: string) {
+        super();
+        if (rol) {
+            this.nom = nom;
+            this.DNI = DNI;
+            this.categoria = categoria;
+            this.rol = rol;
+        } else {
+            this.nom = nom;
+            this.DNI = DNI;
+            this.categoria = categoria;
+        }
+    }
 
-    public Treballador(){};
-    
-    public Treballador(String nom, String DNI, Categoria c, Rol rol) {
-        this.nom = nom;
-        this.DNI = DNI;
-        this.c = ;c
+    public setRol(rol: string): void {
         this.rol = rol;
     }
-    static JDBCTreballadorDAO treballadordao = new JDBCTreballadorDAO();
-    static JDBCTreballadorFaGuardiaDAO trebunitdao = new JDBCTreballadorFaGuardiaDAO();
-    private String nom;
-    private String DNI;
-    private Categoria c;
-    int qGuardiesTreballades;
-    private List<Guardia> guardies = new ArrayList<>();
-    private Rol rol;
 
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
-    }
-
-    public List<Guardia> getGuardies() throws DAOException {
+    public getGuardies(): Array<Guardia> {
         return trebunitdao.getGuardies(this.getID());
     }
 
-    
-    
 
-    
-
-    @Override
-    public String toString() {
-        return "Treballador{" + "nom=" + nom + ", DNI=" + DNI + ", c=" + c + ", qGuardiesTreballades=" + qGuardiesTreballades + ", id=" + this.getID() + '}';
+    public toString(): string {
+        return "Treballador{" + "nom=" + this.nom + ", DNI=" + this.DNI + ", categoria=" + this.categoria + ", qGuardiesTreballades=" + this.qGuardiesTreballades + "id=" + this.getID() + "}";
     }
 
-    public Treballador(String nom, String DNI, Categoria c) throws DAOException {
-        this.nom = nom;
-        this.DNI = DNI;
-        this.c = c;
 
+
+    public getNom(): string {
+        return this.nom;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
+    public setNom(nom: string): void {
         this.nom = nom;
     }
 
-    public String getDNI() {
-        return DNI;
+    public getDNI(): string {
+        return this.DNI;
     }
 
-    public void setDNI(String DNI) {
+    public setDNI(DNI: string): void {
         this.DNI = DNI;
     }
 
-    public Categoria getC() {
-        return c;
+    public getCategoria(): Categoria {
+        return this.categoria;
     }
 
-    public void setC(Categoria c) {
-        this.c = c;
+    public setCategoria(categoria: Categoria): void {
+        this.categoria = categoria;
     }
 
-   public void reservarGuardia(Guardia g) throws DAOException {
-        if (!g.getCoberta()) {
-            try {
-                trebunitdao.reservarGuardia(this.getID(), g.getID());
-            } catch (DAOException ex) {
-                throw new DAOException();
-            }
-            
+    public reservarGuardia(guardia: Guardia): void {
+        if (!guardia.getCoberta()) {
+            trebunitdao.reservarGuardia(this.getID(), g.getID());
         }
     }
 
-   public void anularGuardia(Guardia g) throws DAOException {
-       
-        try {
-            trebunitdao.anularGuardia(this.getID(), g.getID());
-        } catch (DAOException ex) {
-            throw new DAOException();
-        }
-       
+    public anularGuardia(guardia: Guardia): void {
+
+        trebunitdao.anularGuardia(this.getID(), guardia.getID());
 
     }
 
 }
+
+export = Treballador;
