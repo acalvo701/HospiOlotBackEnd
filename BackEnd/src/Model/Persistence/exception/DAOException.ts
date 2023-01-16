@@ -1,0 +1,6 @@
+
+class DAOException extends Error {
+
+   
+    
+}
