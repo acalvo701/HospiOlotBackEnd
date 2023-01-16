@@ -6,7 +6,7 @@ class Treballador extends Entity {
     private DNI: string;
     private categoria: Categoria;
     private qGuardiesTreballades: number;
-    private guardies: Array<Guardia> = new Array<>();
+    private guardies: Array<Guardia> = new Array();
     private rol: string;
     static treballadordao: JDBCTreballadorDAO = new JDBCTreballadorDAO();
     static trebunitdao: JDBCTreballadorFaGuardiaDAO = new JDBCTreballadorFaGuardiaDAO();
@@ -23,6 +23,10 @@ class Treballador extends Entity {
             this.DNI = DNI;
             this.categoria = categoria;
         }
+    }
+
+    public getRol(): string {
+        return this.rol;
     }
 
     public setRol(rol: string): void {
