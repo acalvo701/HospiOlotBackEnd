@@ -8,7 +8,7 @@ class Treballador {
     public Treballador(String nom, String DNI, Categoria c, Rol rol) {
         this.nom = nom;
         this.DNI = DNI;
-        this.c = c;
+        this.c = ;c
         this.rol = rol;
     }
     static JDBCTreballadorDAO treballadordao = new JDBCTreballadorDAO();

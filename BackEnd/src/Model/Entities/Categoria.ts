@@ -2,7 +2,7 @@ class Categoria {
 
     private nom: string;
 
-    public Categoria(nom: string) {
+    public constructor(nom: string) {
         this.nom = nom;
     }
 

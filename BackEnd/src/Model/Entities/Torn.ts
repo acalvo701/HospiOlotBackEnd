@@ -4,7 +4,7 @@ class Torn{
 
     private modalitat:string;
 
-    public Torn(modalitat:string) {
+    public constructor(modalitat:string) {
         this.modalitat = modalitat;
     }
 

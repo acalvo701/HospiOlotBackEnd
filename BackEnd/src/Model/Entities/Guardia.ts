@@ -3,131 +3,119 @@ import Categoria from "./Categoria";
 import Unitat from "./Unitat";
 import Torn from "./Torn";
 import Treballador from "./Treballador";
+import GuardiaModel from "./GuardiaModel";
 
 class Guardia extends Entity {
 
-//    static JDBCTreballadorFaGuardiaDAO trebunitdao = new JDBCTreballadorFaGuardiaDAO();
+    //    static JDBCTreballadorFaGuardiaDAO trebunitdao = new JDBCTreballadorFaGuardiaDAO();
 
-    private c:Categoria;
-    private u:Unitat;
-    private t:Torn;
-    private data:Date;
-    private placesACobrir:number;
-    private coberta:boolean;
-    private treballadors:Array<Treballador> ;
+    private categoria: Categoria;
+    private unitat: Unitat;
+    private torn: Torn;
+    private data: Date;
+    private placesACobrir: number;
+    private coberta: boolean;
+    private treballadors: Array<Treballador>;
 
 
-    public constructor () {
+    public constructor(id?: number, categoria?: Categoria, unitat?: Unitat, torn?: Torn, data?: Date, placesCobrir?: number, guardiaModel?: GuardiaModel) {
         super();
 
+        if (guardiaModel && data) {
+            this.categoria = guardiaModel.getC();
+            this.torn = guardiaModel.getT();
+            this.unitat = guardiaModel.getU();
+            this.placesACobrir = guardiaModel.getPlacesCobrir();
+            this.data = data;
+
+        } else if (categoria && unitat && torn && placesCobrir) {
+            this.categoria = categoria;
+            this.unitat = unitat;
+            this.torn = torn;
+            this.placesACobrir = placesCobrir;
+
+        } else if (categoria && unitat && torn && data && placesCobrir) {
+            this.categoria = categoria;
+            this.unitat = unitat;
+            this.torn = torn;
+            this.data = data;
+            this.placesACobrir = placesCobrir;
+
+        } else if (id && categoria && unitat && torn && data && placesCobrir) {
+            this.setID(id);
+            this.categoria = categoria;
+            this.unitat = unitat;
+            this.torn = torn;
+            this.data = data;
+            this.placesACobrir = placesCobrir;
+        }
     }
 
-    public getTreballadors():Array<Treballador> | Error {
-      
+    public getTreballadors(): Array<Treballador> {
+
         return trebunitdao.getTreballadors(this.getID());
     }
 
-    public getCoberta():Boolean {
-        if (this.getTreballadors()==null) {
+    public getCoberta(): Boolean {
+        if (this.getTreballadors() == null) {
             return true;
         } else {
-            return this.getTreballadors().size() == placesACobrir;
+            return this.getTreballadors().length == this.placesACobrir;
         }
 
     }
 
-    public setCoberta(isCoberta:boolean):void {
+    public setCoberta(isCoberta: boolean): void {
         this.coberta = isCoberta;
     }
 
-  
-    
-    public Guardia(c:Categoria, u:Unitat, t:Torn, placesCobrir:number):void {
-        this.c = c;
-        this.u = u;
-        this.t = t;
-        this.placesACobrir = placesCobrir;
-    }
-    
-    public Guardia(long id, Categoria c, Unitat u, Torn t, LocalDate data, Byte placesCobrir) {
-        this.setID(id);
-        this.c = c;
-        this.u = u;
-        this.t = t;
-        this.data = data;
-        this.placesACobrir = placesCobrir;
+    public toString(): string {
+        return "id= " + this.getID() + this.categoria + "," + this.unitat + "," + this.torn + "," + this.data + "," + this.placesACobrir;
     }
 
-    public Guardia(Categoria c, Unitat u, Torn t, LocalDate data, Byte placesCobrir) {
-        this.c = c;
-        this.u = u;
-        this.t = t;
-        this.data = data;
-        this.placesACobrir = placesCobrir;
+    public toStringv2(): string {
+        return "id= " + this.getID() + this.unitat + "," + this.torn + "," + this.data + "," + this.placesACobrir;
     }
 
-    public Guardia(GuardiaModel g, LocalDate data) {
-        this.c = g.getC();
-        this.t = g.getT();
-        this.u = g.getU();
-        this.placesACobrir = g.getPlacesCobrir();
-        this.data = data;
-
+    public getC(): Categoria {
+        return this.categoria;
     }
 
-    public Guardia(Unitat u, Torn t, Categoria c, Byte placesCobrir) {
-        this.c = c;
-        this.u = u;
-        this.t = t;
-        this.placesACobrir = placesCobrir;
+    public setC(categoria: Categoria): void {
+        this.categoria = categoria;
     }
 
-    @Override
-    public String toString() {
-        return "id= " + this.getID() + c + "," + u + "," + t + "," + data + "," + placesACobrir;
+    public getU(): Unitat {
+        return this.unitat;
     }
 
-    public String toStringv2() {
-        return "id= " + this.getID() + u + "," + t + "," + data + "," + placesACobrir;
+    public setU(unitat: Unitat): void {
+        this.unitat = unitat;
     }
 
-    public Categoria getC() {
-        return c;
+    public getT(): Torn {
+        return this.torn;
     }
 
-    public void setC(Categoria c) {
-        this.c = c;
+    public setT(torn: Torn): void {
+        this.torn = torn;
     }
 
-    public Unitat getU() {
-        return u;
+    public getData(): Date {
+        return this.data;
     }
 
-    public void setU(Unitat u) {
-        this.u = u;
-    }
-
-    public Torn getT() {
-        return t;
-    }
-
-    public void setT(Torn t) {
-        this.t = t;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
+    public setData(data: Date): void {
         this.data = data;
     }
 
-    public Byte getPlacesACobrir() {
-        return placesACobrir;
+    public getPlacesACobrir(): number {
+        return this.placesACobrir;
     }
 
-    public void setPlacesACobrir(Byte placesACobrir) {
+    public setPlacesACobrir(placesACobrir: number): void {
         this.placesACobrir = placesACobrir;
     }
 }
+
+export = Guardia;
