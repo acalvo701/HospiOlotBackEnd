@@ -12,8 +12,6 @@ public interface DAO <T>{
     
   //Metodes modificadors 
     void add(T t) throws DAOException;
-    void update(T t) throws DAOException;
-    void delete(T t) throws DAOException;
-    
+    void update(T t) throws DAOException;    
     
 }
