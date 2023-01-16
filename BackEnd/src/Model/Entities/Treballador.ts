@@ -1,16 +1,7 @@
-package hospiolot.model.business.entities;
+import Entity from "./Entity";
+import Categoria from "./Categoria";
 
-import hospiolot.model.business.entities.Categoria;
-import hospiolot.model.business.entities.Entity;
-import hospiolot.model.persistence.dao.implementations.JDBCTreballadorDAO;
-import hospiolot.model.persistence.dao.implementations.JDBCTreballadorFaGuardiaDAO;
-import hospiolot.model.persistence.exception.DAOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class Treballador extends Entity {
+class Treballador {
 
     public Treballador(){};
     

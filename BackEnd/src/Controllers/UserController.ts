@@ -1,7 +1,7 @@
 import bcrypt = require("bcrypt");
-import jwt = require("jsonwebtoken")
-const User = require("../Model/Entities/User.ts");
-const Token = require("../Model/Entities/Token.ts");
+import jwt = require("jsonwebtoken");
+import User = require("../Model/Entities/User");
+import Token = require("../Model/Entities/Token");
 const users:Array<User> = new Array();
 const token = new Token();
 

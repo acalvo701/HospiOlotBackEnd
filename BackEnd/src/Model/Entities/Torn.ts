@@ -1,27 +1,25 @@
-package hospiolot.model.business.entities;
+import Entity from "./Entity";
 
-import hospiolot.model.business.entities.Entity;
+class Torn{
 
+    private modalitat:string;
 
-public class Torn extends Entity {
-
-    private String modalitat;
-
-    public Torn(String modalitat) {
+    public Torn(modalitat:string) {
         this.modalitat = modalitat;
     }
 
-    public String getModalitat() {
-        return modalitat;
+    public getModalitat():string {
+        return this.modalitat;
     }
 
-    public void setModalitat(String modalitat) {
+    public setModalitat(modalitat:string):void {
         this.modalitat = modalitat;
     }
 
-    @Override
-    public String toString() {
-        return  modalitat ;
+    public toString() : string {
+        return this.modalitat; 
     }
-
+    
 }
+
+export = Torn;

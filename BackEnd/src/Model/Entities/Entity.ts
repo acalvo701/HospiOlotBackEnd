@@ -22,3 +22,5 @@ abstract class Entity {
         this.ID = ID;
     }
 }
+
+export = Entity

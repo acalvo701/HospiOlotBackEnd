@@ -14,7 +14,4 @@ class User {
         return hashedPassword;
     }
 }
-
-module.exports = {
-    User
-};
+export = User;
