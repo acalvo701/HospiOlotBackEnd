@@ -7,4 +7,9 @@ const router = express.Router();
 
 router.get('/getAllCategories', CategoriaController.getAllCategories);
 
+// [POST]
+
+router.post('/insertCategoria', CategoriaController.insertCategoria);
+router.post('/updateEstat', CategoriaController.updateEstat);
+
 module.exports = router;
