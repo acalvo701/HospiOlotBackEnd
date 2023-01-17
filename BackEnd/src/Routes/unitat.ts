@@ -1,9 +1,9 @@
 import express from "express";
-import TornController from "../Controllers/TornController";
+import UnitatController from "../Controllers/UnitatController";
 
 const router = express.Router();
 
-router.get('/getAllTorns',TornController.getAllTorns);
+router.get('/getAllUnitats',UnitatController.getAllUnitats);
 // router.post('/login',UserController.login)
 // router.get('/auth',UserController.validateToken,UserController.authenticated)
 
