@@ -81,7 +81,7 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
 
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "UPDATE unitat SET estat = ? WHERE nom = ?";
+        let query = "UPDATE torn SET estat = ? WHERE nom = ?";
         values['0'] = estat;
         values['1'] = nom;
 
@@ -89,14 +89,13 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
             .then((estat) => {
                 logging.info(NAMESPACE, 'Updated estat: ', estat);
                 return res.status(200).json({
-                    estat
+                    message: `Torn ${nom} canviat d'estat!`
                 });
             })
             .catch(error => {
                 logging.error(NAMESPACE, error.message, error);
 
                 return res.status(500).json({
-                    
                     error
                 })
             }).finally(() => {
