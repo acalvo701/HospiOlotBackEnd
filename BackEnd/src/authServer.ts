@@ -15,7 +15,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/torn",tornRoutes);
 app.use("/api/unitat",unitatRoutes);
 app.use("/api/categoria",categoriaRoutes);
-// app.use("/api/guardia",guardiaRoutes);
+app.use("/api/guardia",guardiaRoutes);
 
 const port = process.env.TOKEN_SERVER_PORT;
 

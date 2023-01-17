@@ -4,8 +4,8 @@ import UnitatController from "../Controllers/UnitatController";
 const router = express.Router();
 
 router.get('/getAllUnitats',UnitatController.getAllUnitats);
-// router.post('/login',UserController.login)
-// router.get('/auth',UserController.validateToken,UserController.authenticated)
+router.post('/insertUnitat',UnitatController.insertUnitat);
+router.post('/updateEstat',UnitatController.updateEstat);
 
 
 module.exports = router;

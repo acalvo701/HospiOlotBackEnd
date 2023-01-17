@@ -16,6 +16,7 @@ class Torn{
         this.modalitat = modalitat;
     }
 
+
     public toString() : string {
         return this.modalitat; 
     }
