@@ -1,21 +1,14 @@
-package hospiolot.model.persistence.dao.implementations.connection;
+import "dotenv/config";
+class Connection {
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+    const port = process.env.DB_PORT;
+    const user = process.env.USER;
+    const password = process.env.PASSWORD;
 
+    private static instance:Connection;
 
-public class Connection {
- private final String FILE_CONFIG = "resources/config.properties";
-
-    private static Connection instance;
-    private java.sql.Connection connection;
-
-    private Connection() {
-        Properties prop = new Properties();
+    private constructor() {
+       
         try {
 
             InputStream config = new FileInputStream(FILE_CONFIG);
