@@ -17,22 +17,20 @@ const getAllUnitats = async (req: Request, res: Response, next: NextFunction) =>
                     unitats
                 });
             })
-            .catch(errorQuery => {
-                logging.error(NAMESPACE, errorQuery.message, errorQuery);
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
 
                 return res.status(500).json({
-                    message: errorQuery.message,
-                    errorQuery
+                    error
                 })
             }).finally(() => {
                 connection.end();
             })
-    }).catch(errorConnection => {
-        logging.error(NAMESPACE, errorConnection.message, errorConnection);
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
 
         return res.status(500).json({
-            message: errorConnection.message,
-            errorConnection
+            error
         })
     })
 
@@ -52,25 +50,23 @@ const insertUnitat = async (req: Request, res: Response, next: NextFunction) => 
             .then((unitats) => {
                 logging.info(NAMESPACE, 'Inserted unitats: ', unitats);
                 return res.status(200).json({
-                    unitats
+                    message: `Unitat ${nom} insertada!`
                 });
             })
-            .catch(errorQuery => {
-                logging.error(NAMESPACE, errorQuery.message, errorQuery);
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
 
                 return res.status(500).json({
-                    message: errorQuery.message,
-                    errorQuery
+                    error
                 })
             }).finally(() => {
                 connection.end();
             })
-    }).catch(errorConnection => {
-        logging.error(NAMESPACE, errorConnection.message, errorConnection);
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
 
         return res.status(500).json({
-            message: errorConnection.message,
-            errorConnection
+            error
         })
     })
 
@@ -92,29 +88,27 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
             .then((estat) => {
                 logging.info(NAMESPACE, 'Updated estat: ', estat);
                 return res.status(200).json({
-                    estat
+                    message: `Unitat ${nom} canviada d'estat`
                 });
             })
-            .catch(errorQuery => {
-                logging.error(NAMESPACE, errorQuery.message, errorQuery);
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
 
                 return res.status(500).json({
-                    message: errorQuery.message,
-                    errorQuery
+                    error
                 })
             }).finally(() => {
                 connection.end();
             })
-    }).catch(errorConnection => {
-        logging.error(NAMESPACE, errorConnection.message, errorConnection);
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
 
         return res.status(500).json({
-            message: errorConnection.message,
-            errorConnection
+            error
         })
     })
 
 };
 
 
-export default { getAllUnitats, insertUnitat, updateEstat};
+export default { getAllUnitats, insertUnitat, updateEstat };

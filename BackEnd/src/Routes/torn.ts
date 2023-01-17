@@ -4,8 +4,9 @@ import TornController from "../Controllers/TornController";
 const router = express.Router();
 
 router.get('/getAllTorns',TornController.getAllTorns);
-// router.post('/login',UserController.login)
-// router.get('/auth',UserController.validateToken,UserController.authenticated)
+router.post('/insertTorn',TornController.insertTorn);
+router.post('/updateEstat',TornController.updateEstat);
+
 
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../config/logging";
-import { Connect, Query } from "../config/mysql";
+import { Connect, PreparedQuery, Query } from "../config/mysql";
 
 const NAMESPACE = "Torns";
 const getAllTorns = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,25 +17,99 @@ const getAllTorns = async (req: Request, res: Response, next: NextFunction) => {
                     torns
                 });
             })
-            .catch(errorQuery => {
-                logging.error(NAMESPACE, errorQuery.message, errorQuery);
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
 
                 return res.status(500).json({
-                    message: errorQuery.message,
-                    errorQuery
+                    error
                 })
             }).finally(() => {
                 connection.end();
             })
-    }).catch(errorConnection => {
-        logging.error(NAMESPACE, errorConnection.message, errorConnection);
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
 
         return res.status(500).json({
-            message: errorConnection.message,
-            errorConnection
+            error
         })
     })
 
 };
 
-export default { getAllTorns };
+const insertTorn = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Inserting torn");
+    const nom = req.body.nom;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "INSERT INTO torn (nom) VALUES (?)";
+        values['0'] = nom;
+
+        PreparedQuery(connection, query, values)
+            .then((torns) => {
+                logging.info(NAMESPACE, 'Inserted torn: ', torns);
+                return res.status(200).json({
+                    message: `Torn ${nom} insertat!`
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
+const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Updating estat");
+    const estat = req.body.estat;
+    const nom = req.body.nom;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "UPDATE unitat SET estat = ? WHERE nom = ?";
+        values['0'] = estat;
+        values['1'] = nom;
+
+        PreparedQuery(connection, query, values)
+            .then((estat) => {
+                logging.info(NAMESPACE, 'Updated estat: ', estat);
+                return res.status(200).json({
+                    estat
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
+export default { getAllTorns, insertTorn, updateEstat };
