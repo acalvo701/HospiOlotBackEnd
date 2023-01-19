@@ -7,19 +7,19 @@ const NAMESPACE = "Guardies";
 const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting guardia");
-    const id = req.body.id;
+    const idGuardia = req.body.idGuardia;
    
     Connect().then((connection) => {
         let values = new Array<string>;
         let query = "SELECT * FROM guardia WHERE id = ?";
-        values['0'] = id;
+        values['0'] = idGuardia;
 
         PreparedQuery(connection, query, values)
             .then((guardia) => {
                 logging.info(NAMESPACE, 'Retrieved guardia: ', guardia);
-                return res.status(200).json({
-                    guardia
-                });
+                return res.status(200).json(
+                    guardia[0]
+                );
             })
             .catch(error => {
                 logging.error(NAMESPACE, error.message, error);
@@ -72,9 +72,8 @@ const getGuardiesByDay = async (req: Request, res: Response, next: NextFunction)
             })
         })
     
-    };
+};
     
-
 const getAllGuardies = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting all guardies");

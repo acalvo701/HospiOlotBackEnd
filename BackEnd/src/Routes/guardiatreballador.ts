@@ -3,10 +3,14 @@ import GuardiaTreballadorController from "../Controllers/GuardiaTreballadorContr
 
 const router = express.Router();
 
-router.get('/bookGuardia',GuardiaTreballadorController.bookGuardia);
-// router.get('/getAllGuardies',GuardiaTreballadorController.getAllGuardies);
 
-// router.post('/insertGuardia',GuardiaTreballadorController.insertGuardia);
+router.get('/countTreballadorsOfGuardia',GuardiaTreballadorController.countTreballadorsOfGuardia);
+router.get('/getHistoryTreballador',GuardiaTreballadorController.getHistoryTreballador);
+router.get('/getGuardiesFromTreballador',GuardiaTreballadorController.getGuardiesFromTreballador);
+router.get('/getTreballadorsFromGuardia',GuardiaTreballadorController.getTreballadorsFromGuardia);
+
+router.post('/bookGuardia',GuardiaTreballadorController.bookGuardia);
+router.post('/updateEstat',GuardiaTreballadorController.updateEstat);
 // router.post('/updateGuardia',GuardiaTreballadorController.updateGuardia);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const NAMESPACE = "GuardiesTreballadors";
 
 const bookGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
-    logging.info(NAMESPACE, "Reservant guardia");
+    logging.info(NAMESPACE, "Booking guardia");
 
     const idTreballador = req.body.idTreballador;
     const idGuardia = req.body.idGuardia;
@@ -42,188 +42,192 @@ const bookGuardia = async (req: Request, res: Response, next: NextFunction) => {
     })
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
-
-//     logging.info(NAMESPACE, "Getting guardia");
-//     const id = req.body.id;
-   
-//     Connect().then((connection) => {
-//         let values = new Array<string>;
-//         let query = "SELECT * FROM guardia WHERE id = ?";
-//         values['0'] = id;
-
-//         PreparedQuery(connection, query, values)
-//             .then((guardia) => {
-//                 logging.info(NAMESPACE, 'Retrieved guardia: ', guardia);
-//                 return res.status(200).json({
-//                     guardia
-//                 });
-//             })
-//             .catch(error => {
-//                 logging.error(NAMESPACE, error.message, error);
-
-//                 return res.status(500).json({
-//                     error
-//                 })
-//             }).finally(() => {
-//                 connection.end();
-//             })
-//     }).catch(error => {
-//         logging.error(NAMESPACE, error.message, error);
-
-//         return res.status(500).json({
-//             error
-//         })
-//     })
-// };
-
-// const getAllGuardies = async (req: Request, res: Response, next: NextFunction) => {
-
-//     logging.info(NAMESPACE, "Getting all guardies");
-
-//     let query = "SELECT * FROM guardia";
-
-//     Connect().then((connection) => {
-//         Query(connection, query)
-//             .then((guardies) => {
-//                 logging.info(NAMESPACE, 'Retrieved guardies: ', guardies);
-//                 return res.status(200).json({
-//                     guardies
-//                 });
-//             })
-//             .catch(errorQuery => {
-//                 logging.error(NAMESPACE, errorQuery.message, errorQuery);
-
-//                 return res.status(500).json({
-//                     message: errorQuery.message,
-//                     errorQuery
-//                 })
-//             }).finally(() => {
-//                 connection.end();
-//             })
-//     }).catch(errorConnection => {
-//         logging.error(NAMESPACE, errorConnection.message, errorConnection);
-
-//         return res.status(500).json({
-//             message: errorConnection.message,
-//             errorConnection
-//         })
-//     })
-
-// };
-
-
-
-// const updateGuardia = async (req: Request, res: Response, next: NextFunction) => {
-
-//     logging.info(NAMESPACE, "Updating guardia");
-    
-//     const categoria = req.body.categoria;
-//     const unitat = req.body.unitat;
-//     const torn = req.body.torn;
-//     const dia = req.body.dia;
-//     const numeroPlaces = req.body.numeroPlaces;
-//     const estat = req.body.estat;
-//     const id = req.body.id;
-//     Connect().then((connection) => {
-//         let values = new Array<string>;
-//         let query = "UPDATE guardia SET categoria = ?, unitat = ?, torn = ?, dia = ?, numeroPlaces = ?, estat = ? WHERE id = ?";
-//         values['0'] = categoria;
-//         values['1'] = unitat;
-//         values['2'] = torn;
-//         values['3'] = dia;
-//         values['4'] = numeroPlaces;
-//         values['5'] = estat;
-//         values['6'] = id;
-
-//         PreparedQuery(connection, query, values)
-//             .then((guardia) => {
-//                 logging.info(NAMESPACE, 'Updated guardia: ', guardia);
-//                 return res.status(200).json({
-//                     message: `Guardia ${id} canviada`
-//                 });
-//             })
-//             .catch(error => {
-//                 logging.error(NAMESPACE, error.message, error);
-
-//                 return res.status(500).json({
-//                     error
-//                 })
-//             }).finally(() => {
-//                 connection.end();
-//             })
-//     }).catch(error => {
-//         logging.error(NAMESPACE, error.message, error);
-
-//         return res.status(500).json({
-//             error
-//         })
-//     })
-
-// };
-
-// export default { getGuardia, getAllGuardies, insertGuardia, updateGuardia };
-export default { bookGuardia };
+const getGuardiesFromTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting guardies from treballador");
+
+    const idTreballador = req.body.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = `SELECT guardia.id,guardia.categoria,guardia.unitat,guardia.torn,guardia.dia,guardia.numeroPlaces,gt.estat 
+                     FROM guardia 
+                     INNER JOIN guardiatreballador gt 
+                     ON guardia.id = gt.idGuardia 
+                     WHERE gt.idTreballador = ?`;
+        values['0'] = idTreballador;
+
+        PreparedQuery(connection, query, values)
+            .then((guardies) => {
+                logging.info(NAMESPACE, "Getting guardies from treballador", guardies);
+                return res.status(200).json({
+                    guardies
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
+const getTreballadorsFromGuardia = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting treballadors from guardia");
+
+    const idTreballador = req.body.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "SELECT dni,nom,categoria,gt.estat FROM treballador LEFT JOIN guardiatreballador gt ON treballador.id = gt.idTreballador WHERE gt.idGuardia = ?";
+        values['0'] = idTreballador;
+
+        PreparedQuery(connection, query, values)
+            .then((historial) => {
+                logging.info(NAMESPACE, 'History treballador: ', historial);
+                return res.status(200).json({
+                    historial
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
+const getHistoryTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting history treballador");
+
+    const idTreballador = req.body.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "SELECT dia,gt.estat,torn,unitat,categoria FROM guardia LEFT JOIN guardiatreballador gt ON guardia.id = gt.idGuardia WHERE gt.idTreballador = ? AND UPPER(gt.estat) IN ('PENDENT','ASSIGNADA')";
+        values['0'] = idTreballador;
+
+        PreparedQuery(connection, query, values)
+            .then((historial) => {
+                logging.info(NAMESPACE, 'History treballador: ', historial);
+                return res.status(200).json({
+                    historial
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
+const countTreballadorsOfGuardia = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Counting guard's workers");
+
+    const idGuardia = req.body.idGuardia;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "SELECT COUNT(idTreballador) AS 'count' FROM guardiatreballador WHERE idGuardia = ?";
+        values['0'] = idGuardia;
+
+        PreparedQuery(connection, query, values)
+            .then((count) => {
+                logging.info(NAMESPACE, 'Guardies counted: ', count);
+                return res.status(200).json(
+                    count[0]
+                );
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
+const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Updating estat");
+    const estat = req.body.estat;
+    const idTreballador = req.body.idTreballador;
+    const idGuardia = req.body.idGuardia;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "UPDATE guardiatreballador SET estat = ? WHERE idTreballador = ? AND idGuardia = ?";
+        values['0'] = estat;
+        values['1'] = idTreballador;
+        values['2'] = idGuardia;
+
+        PreparedQuery(connection, query, values)
+            .then((estat) => {
+                logging.info(NAMESPACE, 'Updated estat: ', estat);
+                return res.status(200).json({
+                    message: `Guardia ${idGuardia} canviada d'estat`
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
+export default { bookGuardia, getHistoryTreballador, getGuardiesFromTreballador, getTreballadorsFromGuardia, countTreballadorsOfGuardia, updateEstat };
