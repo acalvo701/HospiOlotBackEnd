@@ -3,9 +3,12 @@ import GuardiaController from "../Controllers/GuardiaController";
 
 const router = express.Router();
 
+router.get('/getGuardia',GuardiaController.getGuardia);
 router.get('/getAllGuardies',GuardiaController.getAllGuardies);
-// router.post('/login',UserController.login)
-// router.get('/auth',UserController.validateToken,UserController.authenticated)
+router.get('/getGuardiesByDay',GuardiaController.getGuardiesByDay);
+router.get('/getMonthGuardiesByDate',GuardiaController.getMonthGuardiesByDate);
 
+router.post('/insertGuardia',GuardiaController.insertGuardia);
+router.post('/updateGuardia',GuardiaController.updateGuardia);
 
 module.exports = router;
