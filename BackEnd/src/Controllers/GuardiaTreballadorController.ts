@@ -122,10 +122,10 @@ const getHistoryTreballador = async (req: Request, res: Response, next: NextFunc
 
     logging.info(NAMESPACE, "Getting history treballador");
 
-    const idTreballador = req.body.idTreballador;
-
+    const idTreballador = req.query.idTreballador;
+    //logging.error(NAMESPACE, idTreballador,idTreballador);
     Connect().then((connection) => {
-        let values = new Array<string>;
+        let values = new Array<any>;
         let query = "SELECT dia,gt.estat,torn,unitat,categoria FROM guardia LEFT JOIN guardiatreballador gt ON guardia.id = gt.idGuardia WHERE gt.idTreballador = ? AND UPPER(gt.estat) IN ('PENDENT','ASSIGNADA')";
         values['0'] = idTreballador;
 
