@@ -8,5 +8,4 @@ router.post('/insertTorn',TornController.insertTorn);
 router.post('/updateEstat',TornController.updateEstat);
 
 
-
 module.exports = router;

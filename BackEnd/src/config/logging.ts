@@ -30,6 +30,14 @@ const debug = (namespace: string, message: string, object?: any) => {
     }
 };
 
+const changed = (namespace: string, message: string, object?: any) => {
+    if (object) {
+        console.debug(`[${getTimeStamp()}] [CHANGED] [${namespace}] ${message}`, object);
+    } else {
+        console.debug(`[${getTimeStamp()}] [CHANGED] [${namespace}] ${message}`);
+    }
+};
+
 const getTimeStamp = (): string => {
     return new Date().toLocaleString("es-ES",{timeZone:"Europe/Madrid"});
 };
@@ -38,5 +46,6 @@ export default {
     info,
     warn,
     error,
-    debug
+    debug,
+    changed
 };
