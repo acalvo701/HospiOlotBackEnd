@@ -1,8 +1,47 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../config/logging";
 import { Connect, PreparedQuery, Query } from "../config/mysql";
+import HistorialController from "./HistorialController";
 
-const NAMESPACE = "Torns";
+const NAMESPACE = "Torn";
+
+const getTorn = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Inserting torn");
+    const nom = req.body.nom;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "SELECT * FROM torn WHERE nom= ?";
+        values['0'] = nom;
+
+        PreparedQuery(connection, query, values)
+            .then((torns) => {
+                logging.info(NAMESPACE, 'Inserted torn: ', torns);
+                return res.status(200).json({
+                    message: `Torn ${nom} insertat!`
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
 const getAllTorns = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting all torns");
@@ -74,7 +113,8 @@ const insertTorn = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
-
+    let accio = "UPDATE";
+    let abans = getTorn(nom);
     logging.info(NAMESPACE, "Updating estat");
     const estat = req.body.estat;
     const nom = req.body.nom;
@@ -108,6 +148,10 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
             error
         })
     })
+
+    let despres =  TornController.getTorn(nom);
+
+    HistorialController.addHistorial(taula,abans,despres,accio);
 
 };
 

@@ -18,7 +18,7 @@ const addHistorial = async (req: Request, res: Response, next: NextFunction) => 
     Connect().then((connection) => {
         let values = new Array<string>;
         let query = "INSERT INTO historial (data,taula,usuari,abans,despres,accio) VALUES (?,?,?,?,?,?)";
-        values['0'] = data;
+        values['0'] = Date();
         values['1'] = taula;
         values['2'] = usuari;
         values['3'] = abans;
