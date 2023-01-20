@@ -6,12 +6,14 @@ const MYSQL_HOST = process.env.MY_SQL_DB_HOST;
 const MYSQL_DATABASE = process.env.MY_SQL_DB_DATABASE;
 const MYSQL_USER = process.env.MY_SQL_DB_USER;
 const MYSQL_PASSWORD = process.env.MY_SQL_DB_PASSWORD;
+// const MYSQL_PORT = process.env.MY_SQL_DB_PORT;
 
 const MYSQL = {
     host: MYSQL_HOST,
     database: MYSQL_DATABASE,
     user: MYSQL_USER,
-    password: MYSQL_PASSWORD
+    password: MYSQL_PASSWORD,
+    // port: MYSQL_PORT
 }
 
 

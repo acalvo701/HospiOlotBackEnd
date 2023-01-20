@@ -1,11 +1,13 @@
 import mysql = require('mysql2');
 import config = require('./config');
 
-const params = {
+const params:mysql.ConnectionOptions = {
     user: config.mysql.user,
     password: config.mysql.password,
     host: config.mysql.host,
+    // port: config.mysql.port,
     database: config.mysql.database
+
 };
 
 const Connect = async () =>
