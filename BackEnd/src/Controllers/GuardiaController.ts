@@ -41,11 +41,11 @@ const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
 const getGuardiesByDay = async (req: Request, res: Response, next: NextFunction) => {
         logging.info(NAMESPACE, "Getting guardies from specified day");
-        const data = req.body.data;
+        const data = req.query.data;
        
         Connect().then((connection) => {
-            let values = new Array<string>;
-            let query = "SELECT * FROM guardia WHERE guardia.dia = DATE(?)";
+            let values = new Array<any>;
+            let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = '2023-01-23'";
             values['0'] = data;
     
             PreparedQuery(connection, query, values)
