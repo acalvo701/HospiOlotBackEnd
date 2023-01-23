@@ -44,7 +44,7 @@ const bookGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
 const insertarGuardiaTreballadorAdmin = async (req: Request, res: Response, next: NextFunction) => {
 
-    logging.info(NAMESPACE, "Booking guardia");
+    logging.info(NAMESPACE, "Insert guardia al treballador");
 
     const idTreballador = req.body.idTreballador;
     const idGuardia = req.body.idGuardia;
@@ -61,9 +61,9 @@ const insertarGuardiaTreballadorAdmin = async (req: Request, res: Response, next
 
         PreparedQuery(connection, query, values)
             .then((guardia) => {
-                logging.info(NAMESPACE, 'Guardia booked: ', guardia);
+                logging.info(NAMESPACE, 'Guardia assginada o canviada d\'estat: ', guardia);
                 return res.status(200).json({
-                    message: `Guardia reservada!`
+                    message: `Guardia canviada!`
                 });
             })
             .catch(error => {
