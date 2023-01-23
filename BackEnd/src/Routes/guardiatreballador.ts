@@ -11,6 +11,6 @@ router.get('/getTreballadorsFromGuardia',GuardiaTreballadorController.getTreball
 
 router.post('/bookGuardia',GuardiaTreballadorController.bookGuardia);
 router.post('/updateEstat',GuardiaTreballadorController.updateEstat);
-// router.post('/updateGuardia',GuardiaTreballadorController.updateGuardia);
+router.post('/insertarGuardiaTreballadorAdmin',GuardiaTreballadorController.insertarGuardiaTreballadorAdmin);
 
 module.exports = router;
