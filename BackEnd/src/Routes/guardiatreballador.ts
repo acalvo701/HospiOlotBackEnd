@@ -8,7 +8,9 @@ router.get('/countTreballadorsOfGuardia',GuardiaTreballadorController.countTreba
 router.get('/getHistoryTreballador',GuardiaTreballadorController.getHistoryTreballador);
 router.get('/getGuardiesFromTreballador',GuardiaTreballadorController.getGuardiesFromTreballador);
 router.get('/getTreballadorsFromGuardia',GuardiaTreballadorController.getTreballadorsFromGuardia);
+router.get('/getGuardiesByDayFromTreballador',GuardiaTreballadorController.getGuardiesByDayFromTreballador);
 
+router.post('/cancelGuardia',GuardiaTreballadorController.cancelGuardia);
 router.post('/bookGuardia',GuardiaTreballadorController.bookGuardia);
 router.post('/updateEstat',GuardiaTreballadorController.updateEstat);
 router.post('/insertarGuardiaTreballadorAdmin',GuardiaTreballadorController.insertarGuardiaTreballadorAdmin);

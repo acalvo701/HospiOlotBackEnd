@@ -8,12 +8,12 @@ const bookGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Booking guardia");
 
-    const idTreballador = req.body.idTreballador;
-    const idGuardia = req.body.idGuardia;
+    const idTreballador = req.query.idTreballador;
+    const idGuardia = req.query.idGuardia;
 
     Connect().then((connection) => {
-        let values = new Array<string>;
-        let query = "INSERT INTO guardiatreballador (idTreballador,idGuardia) VALUES (?,?)";
+        let values = new Array<any>;
+        let query = "INSERT INTO guardiatreballador (idTreballador,idGuardia) VALUES (?,?) ON DUPLICATE KEY UPDATE estat='PENDENT'";
         values['0'] = idTreballador;
         values['1'] = idGuardia;
 
@@ -83,6 +83,56 @@ const insertarGuardiaTreballadorAdmin = async (req: Request, res: Response, next
         })
     })
 };
+
+const getGuardiesByDayFromTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting guardies from treballador on given day");
+    const dia = req.query.dia;
+    const idTreballador = req.query.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = `SELECT *,(SELECT COUNT(*) FROM guardiatreballador 
+        WHERE guardiatreballador.idGuardia = guardia.id 
+        AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades'
+        
+        
+        
+        
+        FROM guardia
+        INNER JOIN guardiatreballador
+        ON guardia.id = guardiatreballador.idGuardia
+        WHERE guardiatreballador.idTreballador = ?
+        AND guardia.dia = ?
+        AND UPPER(guardiatreballador.estat) != 'CANCELADA'`;
+        values['0'] = idTreballador;
+        values['1'] = dia;
+
+        PreparedQuery(connection, query, values)
+            .then((guardies) => {
+                logging.info(NAMESPACE, "Getting guardies from treballador", guardies);
+                return res.status(200).json({
+                    guardies
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
 
 const getGuardiesFromTreballador = async (req: Request, res: Response, next: NextFunction) => {
 
@@ -273,4 +323,42 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
 
 };
 
-export default { bookGuardia, getHistoryTreballador, getGuardiesFromTreballador, getTreballadorsFromGuardia, countTreballadorsOfGuardia, updateEstat, insertarGuardiaTreballadorAdmin };
+const cancelGuardia = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Canceling guardia");
+    const idTreballador = req.query.idTreballador;
+    const idGuardia = req.query.idGuardia;
+
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = "UPDATE guardiatreballador SET estat = 'CANCELADA' WHERE idTreballador = ? AND idGuardia = ?";
+        values['0'] = idTreballador;
+        values['1'] = idGuardia;
+
+        PreparedQuery(connection, query, values)
+            .then((response) => {
+                logging.info(NAMESPACE, 'Canceled guardia: ', response);
+                return res.status(200).json({
+                    message: `Guardia ${idGuardia} cancelada`
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
+export default { cancelGuardia, bookGuardia, getGuardiesByDayFromTreballador, getHistoryTreballador, getGuardiesFromTreballador, getTreballadorsFromGuardia, countTreballadorsOfGuardia, updateEstat, insertarGuardiaTreballadorAdmin };
