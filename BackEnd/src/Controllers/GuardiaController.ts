@@ -41,10 +41,10 @@ const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
 const getGuardiesByDay = async (req: Request, res: Response, next: NextFunction) => {
         logging.info(NAMESPACE, "Getting guardies from specified day");
-        const data = req.body.data;
+        const data = req.query.data;
        
         Connect().then((connection) => {
-            let values = new Array<string>;
+            let values = new Array<any>;
             let query = "SELECT * FROM guardia WHERE guardia.dia = DATE(?)";
             values['0'] = data;
     
