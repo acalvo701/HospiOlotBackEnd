@@ -114,7 +114,7 @@ const insertTorn = async (req: Request, res: Response, next: NextFunction) => {
 
 const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
     let accio = "UPDATE";
-    let abans = getTorn(nom);
+    //let abans = getTorn(nom);
     logging.info(NAMESPACE, "Updating estat");
     const estat = req.body.estat;
     const nom = req.body.nom;
@@ -149,9 +149,9 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
         })
     })
 
-    let despres =  TornController.getTorn(nom);
+  //  let despres =  TornController.getTorn(nom);
 
-    HistorialController.addHistorial(taula,abans,despres,accio);
+    //HistorialController.addHistorial(taula,abans,despres,accio);
 
 };
 

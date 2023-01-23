@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express = require("express");
 import JsonWebTokenError = require("jsonwebtoken");
-
+const cors = require('cors');
 const app = express();
 
 const guardiaRoutes = require("./Routes/guardia.ts");
@@ -12,6 +12,7 @@ const unitatRoutes = require("./Routes/unitat.ts");
 const categoriaRoutes = require("./Routes/categoria.ts");
 const historial = require("./Routes/historial.ts");
 
+app.use(cors());
 app.use(express.json());
 app.use("/guardia", guardiaRoutes);
 app.use("/treballador", treballadorRoutes);

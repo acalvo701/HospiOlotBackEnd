@@ -6,8 +6,8 @@ const params:mysql.ConnectionOptions = {
     password: config.mysql.password,
     host: config.mysql.host,
     // port: config.mysql.port,
-    database: config.mysql.database
-
+    database: config.mysql.database,
+    dateStrings: true
 };
 
 const Connect = async () =>
