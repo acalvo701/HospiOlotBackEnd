@@ -10,5 +10,6 @@ router.get('/getMonthGuardiesByDate',GuardiaController.getMonthGuardiesByDate);
 
 router.post('/insertGuardia',GuardiaController.insertGuardia);
 router.post('/updateGuardia',GuardiaController.updateGuardia);
+router.post('/updateEstatGuardiaAdmin',GuardiaController.updateEstatGuardiaAdmin);
 
 module.exports = router;

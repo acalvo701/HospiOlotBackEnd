@@ -234,7 +234,44 @@ const updateGuardia = async (req: Request, res: Response, next: NextFunction) =>
             error
         })
     })
-
 };
 
-export default { getGuardia, getAllGuardies, getGuardiesByDay, getMonthGuardiesByDate, insertGuardia, updateGuardia };
+const updateEstatGuardiaAdmin = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Updating estat de la guardia");
+    
+    const estat = req.body.estat;
+    const id = req.body.id;
+    
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "UPDATE guardia SET estat = ? WHERE id = ?";
+        values['0'] = estat;
+        values['1'] = id;
+
+        PreparedQuery(connection, query, values)
+            .then((guardia) => {
+                logging.info(NAMESPACE, 'Updated estat de la guardia: ', guardia);
+                return res.status(200).json({
+                    message: `Estat de la guardia ${id} canviada a ${estat}`
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
+export default { getGuardia, getAllGuardies, getGuardiesByDay, getMonthGuardiesByDate, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };
