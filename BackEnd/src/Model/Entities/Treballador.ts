@@ -8,9 +8,7 @@ class Treballador extends Entity {
     private qGuardiesTreballades: number;
     private guardies: Array<Guardia> = new Array();
     private rol: string;
-    static treballadordao: JDBCTreballadorDAO = new JDBCTreballadorDAO();
-    static trebunitdao: JDBCTreballadorFaGuardiaDAO = new JDBCTreballadorFaGuardiaDAO();
-
+    public password: string;
     constructor(nom: string, DNI: string, categoria: Categoria, rol: string) {
         super();
         if (rol) {
@@ -33,9 +31,9 @@ class Treballador extends Entity {
         this.rol = rol;
     }
 
-    public getGuardies(): Array<Guardia> {
-        return trebunitdao.getGuardies(this.getID());
-    }
+    // public getGuardies(): Array<Guardia> {
+    //     return trebunitdao.getGuardies(this.getID());
+    // }
 
 
     public toString(): string {
@@ -68,17 +66,17 @@ class Treballador extends Entity {
         this.categoria = categoria;
     }
 
-    public reservarGuardia(guardia: Guardia): void {
-        if (!guardia.getCoberta()) {
-            trebunitdao.reservarGuardia(this.getID(), g.getID());
-        }
-    }
+    // public reservarGuardia(guardia: Guardia): void {
+    //     if (!guardia.getCoberta()) {
+    //         trebunitdao.reservarGuardia(this.getID(), g.getID());
+    //     }
+    // }
 
-    public anularGuardia(guardia: Guardia): void {
+    // public anularGuardia(guardia: Guardia): void {
 
-        trebunitdao.anularGuardia(this.getID(), guardia.getID());
+    //     trebunitdao.anularGuardia(this.getID(), guardia.getID());
 
-    }
+    // }
 
 }
 

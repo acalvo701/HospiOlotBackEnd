@@ -3,7 +3,6 @@ import GuardiaTreballadorController from "../Controllers/GuardiaTreballadorContr
 
 const router = express.Router();
 
-
 router.get('/countTreballadorsOfGuardia',GuardiaTreballadorController.countTreballadorsOfGuardia);
 router.get('/getHistoryTreballador',GuardiaTreballadorController.getHistoryTreballador);
 router.get('/getGuardiesFromTreballador',GuardiaTreballadorController.getGuardiesFromTreballador);

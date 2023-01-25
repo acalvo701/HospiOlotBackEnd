@@ -218,7 +218,7 @@ const getHistoryTreballador = async (req: Request, res: Response, next: NextFunc
     //logging.error(NAMESPACE, idTreballador,idTreballador);
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT dia,gt.estat,torn,unitat,categoria FROM guardia LEFT JOIN guardiatreballador gt ON guardia.id = gt.idGuardia WHERE gt.idTreballador = ? AND UPPER(gt.estat) IN ('PENDENT','ASSIGNADA')";
+        let query = "SELECT dia,gt.estat,torn,unitat,categoria FROM guardia LEFT JOIN guardiatreballador gt ON guardia.id = gt.idGuardia WHERE gt.idTreballador = ? AND UPPER(gt.estat) IN ('PENDENT','ASSIGNADA') ORDER BY dia ASC";
         values['0'] = idTreballador;
 
         PreparedQuery(connection, query, values)
