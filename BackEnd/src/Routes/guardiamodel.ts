@@ -3,9 +3,8 @@ import GuardiaModelController from "../Controllers/GuardiaModelController";
 
 const router = express.Router();
 
+router.get('/getEsquema',GuardiaModelController.getEsquema);
 
-router.get('/countTreballadorsOfGuardia',GuardiaModelController.getEsquema);
-
-router.post('/cancelGuardia',GuardiaModelController.updateEsquemaRow);
+router.post('/updateEsquemaRow',GuardiaModelController.updateEsquemaRow);
 
 module.exports = router;
