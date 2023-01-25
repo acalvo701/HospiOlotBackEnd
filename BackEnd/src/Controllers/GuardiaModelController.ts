@@ -7,12 +7,10 @@ const NAMESPACE = "GuardiaModel";
 const getEsquema = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting esquema");
-    const idGuardia = req.body.idGuardia;
+
+    let query = "SELECT * FROM guardiamodel";
 
     Connect().then((connection) => {
-        let values = new Array<string>;
-        let query = "SELECT * FROM guardiamodel";
-
         Query(connection, query)
             .then((esquema) => {
                 logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
@@ -20,11 +18,12 @@ const getEsquema = async (req: Request, res: Response, next: NextFunction) => {
                     esquema
                 );
             })
-            .catch(error => {
-                logging.error(NAMESPACE, error.message, error);
+            .catch(errorQuery => {
+                logging.error(NAMESPACE, errorQuery.message, errorQuery);
 
                 return res.status(500).json({
-                    error
+                    message: errorQuery.message,
+                    errorQuery
                 })
             }).finally(() => {
                 connection.end();
@@ -50,7 +49,7 @@ const updateEsquemaRow = async (req: Request, res: Response, next: NextFunction)
     const id = req.body.id;
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "UPDATE guardia SET categoria = ?, unitat = ?, torn = ?, numeroPlaces = ?, estat = ? WHERE id = ?";
+        let query = "UPDATE guardiamodel SET categoria = ?, unitat = ?, torn = ?, numeroPlaces = ?, estat = ? WHERE id = ?";
         values['0'] = categoria;
         values['1'] = unitat;
         values['2'] = torn;

@@ -98,12 +98,11 @@ const getAllGuardies = async (req: Request, res: Response, next: NextFunction) =
             }).finally(() => {
                 connection.end();
             })
-    }).catch(errorConnection => {
-        logging.error(NAMESPACE, errorConnection.message, errorConnection);
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
 
         return res.status(500).json({
-            message: errorConnection.message,
-            errorConnection
+            error
         })
     })
 
