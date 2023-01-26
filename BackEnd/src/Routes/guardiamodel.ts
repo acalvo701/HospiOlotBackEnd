@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.get('/getEsquema',GuardiaModelController.getEsquema);
 
+router.post('/insertEsquemaRow',GuardiaModelController.insertEsquemaRow);
 router.post('/updateEsquemaRow',GuardiaModelController.updateEsquemaRow);
-
+router.post('/deleteEsquemaRow',GuardiaModelController.deleteEsquemaRow);
 module.exports = router;
