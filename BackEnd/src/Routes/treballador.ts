@@ -11,7 +11,8 @@ router.post('/updateTreballador',TreballadorController.updateTreballador);
 
 
 // router.post('/createUser',TreballadorController.createUser);
-router.get('/login',TreballadorController.login)
+router.post('/login',TreballadorController.login)
 router.get('/auth',TreballadorController.validateToken,TreballadorController.authenticated)
+router.post('/refreshToken',TreballadorController.refreshToken);
 
 module.exports = router;

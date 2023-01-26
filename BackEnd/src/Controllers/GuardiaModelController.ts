@@ -18,12 +18,12 @@ const getEsquema = async (req: Request, res: Response, next: NextFunction) => {
                     esquema
                 );
             })
-            .catch(errorQuery => {
-                logging.error(NAMESPACE, errorQuery.message, errorQuery);
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
 
                 return res.status(500).json({
-                    message: errorQuery.message,
-                    errorQuery
+                    error
+                    
                 })
             }).finally(() => {
                 connection.end();

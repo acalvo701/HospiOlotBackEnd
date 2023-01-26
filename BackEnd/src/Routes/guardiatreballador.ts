@@ -1,5 +1,6 @@
 import express from "express";
 import GuardiaTreballadorController from "../Controllers/GuardiaTreballadorController";
+import TreballadorController from "../Controllers/TreballadorController";
 
 const router = express.Router();
 
@@ -7,7 +8,7 @@ router.get('/countTreballadorsOfGuardia',GuardiaTreballadorController.countTreba
 router.get('/getHistoryTreballador',GuardiaTreballadorController.getHistoryTreballador);
 router.get('/getGuardiesFromTreballador',GuardiaTreballadorController.getGuardiesFromTreballador);
 router.get('/getTreballadorsFromGuardia',GuardiaTreballadorController.getTreballadorsFromGuardia);
-router.get('/getGuardiesByDayFromTreballador',GuardiaTreballadorController.getGuardiesByDayFromTreballador);
+router.get('/getGuardiesByDayFromTreballador',TreballadorController.validateToken,GuardiaTreballadorController.getGuardiesByDayFromTreballador);
 
 router.post('/cancelGuardia',GuardiaTreballadorController.cancelGuardia);
 router.post('/bookGuardia',GuardiaTreballadorController.bookGuardia);

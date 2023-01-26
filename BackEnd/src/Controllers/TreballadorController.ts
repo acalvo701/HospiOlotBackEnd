@@ -6,7 +6,7 @@ import jwt = require("jsonwebtoken");
 import User = require("../Model/Entities/User");
 import Token = require("../Model/Entities/Token");
 import Treballador = require("../Model/Entities/Treballador");
-
+import jwt_decode from "jwt-decode";
 const token = new Token();
 const NAMESPACE = "Treballadors";
 
@@ -171,30 +171,32 @@ const updateTreballador = async (req: Request, res: Response, next: NextFunction
 const login = (async (req: Request, res: Response, next: NextFunction) => {
 
         logging.info(NAMESPACE, "Logging in");
-        const dni = req.query.dni;
-        const password = User.encrypt(req.query.password);
+        const dni = req.body.dni;
+        const password =(req.body.password);
+        
         Connect().then((connection) => {
-            let values = new Array<any>;
+            let values = new Array<string>;
             let query = "SELECT * FROM treballador WHERE dni = ?";
             values['0'] = dni;
             PreparedQuery(connection, query, values)
                 .then(async (treballador) => {
                     logging.info(NAMESPACE, 'Retrieved treballador: ', treballador);
-                    console.log(treballador[0]['password']);
+                   
                     
-                    if (treballador === null || treballador === undefined) {
+                    if (treballador === null || treballador === undefined || (Array.isArray(treballador) && treballador.length === 0)) {
                         res.status(404).send("Usuari o password no vàlid")
                     } else {
-                        
-                        if (await bcrypt.compare( password, treballador['password'])) {
-                            token.generateAccessToken({ user: dni });
-                            token.generateRefreshToken({ user: dni });
+                        console.log(password);
+                        if (await bcrypt.compare( password, treballador[0]['password'])) {
+                            treballador = treballador[0];
+                            token.generateAccessToken({dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
+                            token.generateRefreshToken({dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
                             res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
                         } else {
                             res.status(401).send("Dades incorrectes")
                         }
                 
-                        // res.status(201).send(users);
+                      
                     }
 
                 })
@@ -218,7 +220,6 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 });
 
 const validateToken = (async (req, res, next) => {
-    console.log(req.headers["authorization"]);
     const accessToken = req.headers["authorization"].split(" ")[1];
     if (accessToken == null) {
         res.sendStatus(400).send("Token not present")
@@ -231,8 +232,6 @@ const validateToken = (async (req, res, next) => {
             }
         })
     }
-    console.log("Validate token")
-    console.log(accessToken)
 
 })
 
@@ -243,19 +242,22 @@ const authenticated = (async (req, res) => {
 
 const refreshToken = (async (req, res) => {
 
-    const token = req.body.token;
-    const dni = req.body.dni;
-
-    if (!token.refreshTokens.includes(token)) {
+    const refreshToken = req.body.refreshToken;
+    console.log(refreshToken);
+    if (!token.refreshTokens.includes(refreshToken)) {
         res.status(400).send("Refresh token invalid");
     } else {
-        token.eliminarRefreshToken(token);
+        token.eliminarRefreshToken(refreshToken);
 
-        token.generateAccessToken(({ user: dni }))
-        token.generateRefreshToken({ user: dni })
+        console.log("refreshing");
+
+        let user = jwt_decode(refreshToken);
+        token.generateAccessToken(({ user: user }))
+        token.generateRefreshToken({ user: user })
 
         res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
     }
 })
 
-export default { login,authenticated,validateToken,getTreballador, getAllTreballadors, insertTreballador, updateTreballador };
+
+export default { refreshToken, login,authenticated,validateToken,getTreballador, getAllTreballadors, insertTreballador, updateTreballador };
