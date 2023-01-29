@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../config/logging";
-import { Connect, Query, PreparedQuery } from "../config/mysql";
+import { Connect, Query, PreparedQuery, BulkPreparedQuery } from "../config/mysql";
 import GuardiaModel from "../Model/Entities/GuardiaModel";
 
 const NAMESPACE = "GuardiaModel";
@@ -170,7 +170,7 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
     Connect().then((connection) => {
         Query(connection, query)
             .then((esquema:Array<GuardiaModel>) => {
-                logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
+                // logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
                 const diaInici = req.body.diaInici;
                 const diaFi = req.body.diaFi;
             
@@ -198,21 +198,34 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
             
             
                 });
-
-                console.log(values);
+                
+                BulkPreparedQuery(connection, sql,values)
+                .then((response:any) =>{
+                    return res.status(200).json({
+                        message: `Guardies generades`
+                    });
+                }).catch(error =>{
+                    logging.error(NAMESPACE, error.message, error);
+                    return res.status(500).json({
+                        error
+                    })
+                });
 
             })
             .catch(error => {
                 logging.error(NAMESPACE, error.message, error);
                
-                return error; 
+                return res.status(500).json({
+                    error
+                })
             }).finally(() => {
                 connection.end();
             })
     }).catch(error => {
         logging.error(NAMESPACE, error.message, error);
-        console.log(error);
-        return error
+        return res.status(500).json({
+            error
+        })
         
     });
 
@@ -226,25 +239,29 @@ export default { getEsquema, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRo
 function getDiumenges(diaInici: string, diaFi: string) {
     let entrar: boolean = true;
     let dataEntrada: Date = new Date(diaInici);
+    let dataFi: Date = new Date(diaFi)
     let dates = new Array<string>();
+    let counter = 0;
+    while(dataEntrada <= dataFi){
 
-    if (dataEntrada.getDay() == 0 && entrar == true) {
-      dataEntrada.setDate(dataEntrada.getDate() - 1);
-      entrar = false;
+        if(dataEntrada.getDay() == 0 && counter === 0){
+            dates.push(dateToString(dataEntrada));
+        }else{
+            dataEntrada.setDate(dataEntrada.getDate() + (0 - 1 - dataEntrada.getDay() + 7) % 7 + 1);
+            if(dataEntrada <= dataFi){
+                dates.push(dateToString(dataEntrada));
+            }
+          
+        }
+        counter++;  
     }
-    for (let index = 0; index <= +num; index++) {
-      let diumenges = new Date(
-        dataEntrada.setDate(
-          dataEntrada.getDate() - dataEntrada.getDay() + 7
-        )
-      );
-      dates.push(dateToString(diumenges));
-      diumenges = diumenges;
-    }
+
     return dates;
 }
 
 function dateToString (dateString:Date) :string {
-    return dateString.toLocaleString();   
     
-    }
+   let data = dateString.toLocaleString().split('/').join('-').split(',')[0].split('-');
+    let reformatData = data[2] + "-"+data[1] + "-"+data[0];
+    return reformatData;
+}

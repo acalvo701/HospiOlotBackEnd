@@ -47,5 +47,17 @@ const PreparedQuery = async (connection: mysql.Connection, query: string, values
 
             resolve(result);
         });
+});
+
+const BulkPreparedQuery = async (connection: mysql.Connection, query: string, values: Array<Array<string>>) =>
+new Promise((resolve, reject) => {
+    connection.query(query, [values], (error, result) => {
+        if (error) {
+            reject(error);
+            return;
+        }
+
+        resolve(result);
     });
-export { Connect, Query, PreparedQuery};
+});
+export { Connect, Query, PreparedQuery, BulkPreparedQuery};
