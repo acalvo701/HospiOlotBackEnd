@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../config/logging";
 import { Connect, Query, PreparedQuery } from "../config/mysql";
+import GuardiaModel from "../Model/Entities/GuardiaModel";
 
 const NAMESPACE = "GuardiaModel";
 
@@ -162,5 +163,88 @@ const deleteEsquemaRow = async (req: Request, res: Response, next: NextFunction)
     })
 };
 
+const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFunction) => {
+  
+    let query = "SELECT * FROM guardiamodel";
+    let esquemaReturn;
+    Connect().then((connection) => {
+        Query(connection, query)
+            .then((esquema:Array<GuardiaModel>) => {
+                logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
+                const diaInici = req.body.diaInici;
+                const diaFi = req.body.diaFi;
+            
+                const diumenges = getDiumenges(diaInici,diaFi);
+               
+                var sql = "INSERT INTO guardia (categoria,unitat,torn,dia,numeroPlaces) VALUES ?";
+                
+                let guardia = [];
+                var values = [];
 
-export default { getEsquema, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow };
+                diumenges.forEach(diumenge => {
+                    
+                    esquema.forEach(guardiaModel => {
+
+                        guardia.push(guardiaModel.categoria);
+                        guardia.push(guardiaModel.unitat);
+                        guardia.push(guardiaModel.torn);
+                        guardia.push(diumenge)
+                        guardia.push(guardiaModel.numeroPlaces);
+                        values.push(guardia);
+                        guardia = [];
+                    });
+                   
+                   
+            
+            
+                });
+
+                console.log(values);
+
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+               
+                return error; 
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+        console.log(error);
+        return error
+        
+    });
+
+   
+};
+
+
+export default { getEsquema, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow, generarGuardiesEsquema };
+
+
+function getDiumenges(diaInici: string, diaFi: string) {
+    let entrar: boolean = true;
+    let dataEntrada: Date = new Date(diaInici);
+    let dates = new Array<string>();
+
+    if (dataEntrada.getDay() == 0 && entrar == true) {
+      dataEntrada.setDate(dataEntrada.getDate() - 1);
+      entrar = false;
+    }
+    for (let index = 0; index <= +num; index++) {
+      let diumenges = new Date(
+        dataEntrada.setDate(
+          dataEntrada.getDate() - dataEntrada.getDay() + 7
+        )
+      );
+      dates.push(dateToString(diumenges));
+      diumenges = diumenges;
+    }
+    return dates;
+}
+
+function dateToString (dateString:Date) :string {
+    return dateString.toLocaleString();   
+    
+    }

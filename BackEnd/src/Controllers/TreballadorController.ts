@@ -220,6 +220,7 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 });
 
 const validateToken = (async (req, res, next) => {
+    console.log(req.headers);
     const accessToken = req.headers["authorization"].split(" ")[1];
     if (accessToken == null) {
         res.sendStatus(400).send("Token not present")

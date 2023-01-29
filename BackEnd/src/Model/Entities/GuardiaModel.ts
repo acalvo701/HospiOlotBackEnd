@@ -4,62 +4,42 @@ import Torn from "./Torn";
 
 class GuardiaModel {
 
-    private categoria: Categoria;
-    private unitat: Unitat;
-    private torn: Torn;
-    private placesCobrir: number;
-    private diaAModelar: number;
+    public id:number;
+    public categoria: string;
+    public unitat: string;
+    public torn: string;
+    public numeroPlaces: number;
 
-    public constructor(categoria: Categoria, unitat: Unitat, torn: Torn, placesCobrir: number, diaAModelar: number) {
-        this.categoria = categoria;
-        this.unitat = unitat;
-        this.torn = torn;
-        this.placesCobrir = placesCobrir;
-        this.diaAModelar = diaAModelar;
-    }
-
-    public toString(): string {
-        return this.unitat + "," + this.torn + "," + this.categoria + "," + this.placesCobrir;
-    }
-
-    public getDiaAModelar(): number {
-        return this.diaAModelar;
-    }
-
-    public setDiaAModelar(diaAModelar: number): void {
-        this.diaAModelar = diaAModelar;
-    }
-
-    public getC(): Categoria {
+    public getCategoria(): string {
         return this.categoria;
     }
 
-    public setC(categoria: Categoria): void {
+    public setCategoria(categoria: string): void {
         this.categoria = categoria;
     }
 
-    public getU(): Unitat {
+    public getUnitat(): string {
         return this.unitat;
     }
 
-    public setU(unitat: Unitat): void {
+    public setUnitat(unitat: string): void {
         this.unitat = unitat;
     }
 
-    public getT(): Torn {
+    public getTorn(): string {
         return this.torn;
     }
 
-    public setT(torn: Torn): void {
+    public setTorn(torn: string): void {
         this.torn = torn;
     }
 
-    public getPlacesCobrir(): number {
-        return this.placesCobrir;
+    public getNumeroPlaces(): number {
+        return this.numeroPlaces;
     }
 
-    public setPlacesCobrir(placesCobrir: number): void {
-        this.placesCobrir = placesCobrir;
+    public setNumeroPlaces(numeroPlaces: number): void {
+        this.numeroPlaces = numeroPlaces;
     }
 }
 
