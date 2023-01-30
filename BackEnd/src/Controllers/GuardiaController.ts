@@ -8,7 +8,7 @@ const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting guardia");
     const idGuardia = req.body.idGuardia;
-   
+
     Connect().then((connection) => {
         let values = new Array<string>;
         let query = "SELECT * FROM guardia WHERE id = ?";
@@ -40,42 +40,77 @@ const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getGuardiesByDay = async (req: Request, res: Response, next: NextFunction) => {
-        logging.info(NAMESPACE, "Getting guardies from specified day");
-        const data = req.query.data;
-        const idTreballador = req.query.idTreballador;
-       
-        Connect().then((connection) => {
-            let values = new Array<any>;
-            let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = ? AND guardia.unitat IN (SELECT unitat FROM rol WHERE idTreballador = ?)";
-            values['0'] = data;
-            values['1'] = idTreballador;
-    
-            PreparedQuery(connection, query, values)
-                .then((guardies) => {
-                    logging.info(NAMESPACE, 'Retrieved guardies: ', guardies);
-                    return res.status(200).json({
-                        guardies
-                    });
-                })
-                .catch(error => {
-                    logging.error(NAMESPACE, error.message, error);
-    
-                    return res.status(500).json({
-                        error
-                    })
-                }).finally(() => {
-                    connection.end();
-                })
-        }).catch(error => {
-            logging.error(NAMESPACE, error.message, error);
-    
-            return res.status(500).json({
-                error
+    logging.info(NAMESPACE, "Getting guardies from specified day");
+    const data = req.query.data;
+
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = ?";
+        values['0'] = data;
+
+        PreparedQuery(connection, query, values)
+            .then((guardies) => {
+                logging.info(NAMESPACE, 'Retrieved guardies: ', guardies);
+                return res.status(200).json({
+                    guardies
+                });
             })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
         })
-    
+    })
+
 };
-    
+
+const getGuardiesByDayAdmin = async (req: Request, res: Response, next: NextFunction) => {
+    logging.info(NAMESPACE, "Getting guardies from specified day");
+    const data = req.query.data;
+    const idTreballador = req.query.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = ? AND guardia.unitat IN (SELECT unitat FROM rol WHERE idTreballador = ?)";
+        values['0'] = data;
+        values['1'] = idTreballador;
+
+        PreparedQuery(connection, query, values)
+            .then((guardies) => {
+                logging.info(NAMESPACE, 'Retrieved guardies: ', guardies);
+                return res.status(200).json({
+                    guardies
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
 const getAllGuardies = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting all guardies");
@@ -114,7 +149,7 @@ const getMonthGuardiesByDate = async (req: Request, res: Response, next: NextFun
 
     logging.info(NAMESPACE, "Getting guardies from month by date");
     const data = req.query.data;
-   
+
     Connect().then((connection) => {
         let values = new Array<any>;
         let query = "SELECT * FROM guardia where YEAR(?) = YEAR(guardia.dia)  AND MONTH(?) = MONTH(guardia.dia)";
@@ -231,7 +266,7 @@ const insertGuardia = async (req: Request, res: Response, next: NextFunction) =>
 const updateGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Updating guardia");
-    
+
     const categoria = req.body.categoria;
     const unitat = req.body.unitat;
     const torn = req.body.torn;
@@ -278,10 +313,10 @@ const updateGuardia = async (req: Request, res: Response, next: NextFunction) =>
 const updateEstatGuardiaAdmin = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Updating estat de la guardia");
-    
+
     const estat = req.body.estat;
     const id = req.body.id;
-    
+
     Connect().then((connection) => {
         let values = new Array<string>;
         let query = "UPDATE guardia SET estat = ? WHERE id = ?";
@@ -313,4 +348,4 @@ const updateEstatGuardiaAdmin = async (req: Request, res: Response, next: NextFu
     })
 };
 
-export default { getGuardia, getAllGuardies, getGuardiesByDay, getMonthGuardiesByDate,getMonthGuardiesByDateFromTreballador, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };
+export default { getGuardia, getAllGuardies, getGuardiesByDay, getGuardiesByDayAdmin, getMonthGuardiesByDate, getMonthGuardiesByDateFromTreballador, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };

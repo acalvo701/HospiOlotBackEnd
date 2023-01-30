@@ -8,6 +8,7 @@ const router = express.Router();
 router.get('/getGuardia',GuardiaController.getGuardia);
 router.get('/getAllGuardies',TreballadorController.validateToken,GuardiaController.getAllGuardies);
 router.get('/getGuardiesByDay',GuardiaController.getGuardiesByDay);
+router.get('/getGuardiesByDayAdmin',GuardiaController.getGuardiesByDayAdmin);
 router.get('/getMonthGuardiesByDate',GuardiaController.getMonthGuardiesByDate);
 router.get('/getMonthGuardiesByDateFromTreballador',GuardiaController.getMonthGuardiesByDateFromTreballador);
 
