@@ -11,7 +11,7 @@ router.get('/getGuardiesByDay',GuardiaController.getGuardiesByDay);
 router.get('/getGuardiesByDayAdmin',GuardiaController.getGuardiesByDayAdmin);
 router.get('/getMonthGuardiesByDate',GuardiaController.getMonthGuardiesByDate);
 router.get('/getMonthGuardiesByDateFromTreballador',GuardiaController.getMonthGuardiesByDateFromTreballador);
-
+router.get('/getAllGuardiesFromTreballador',GuardiaController.getAllGuardiesFromTreballador);
 
 
 router.post('/insertGuardia',GuardiaController.insertGuardia);
