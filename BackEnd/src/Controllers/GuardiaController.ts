@@ -182,6 +182,42 @@ const getMonthGuardiesByDate = async (req: Request, res: Response, next: NextFun
 
 };
 
+const getAllGuardiesFromTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting guardies from treballador");
+    const data = req.query.data;
+    const treballador = req.query.idTreballador;
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = "SELECT guardiatreballador.estat,guardia.dia FROM guardiatreballador INNER JOIN guardia ON guardiatreballador.idGuardia = guardia.id WHERE guardia.id IN (SELECT idGuardia from guardiatreballador WHERE idTreballador=?)";
+        values['0'] = treballador;
+        PreparedQuery(connection, query, values)
+            .then((guardies) => {
+                logging.info(NAMESPACE, 'Retrieved guardies: ', guardies);
+                return res.status(200).json({
+                    guardies
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
+
 const getMonthGuardiesByDateFromTreballador = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting guardies from month by date");
@@ -348,4 +384,4 @@ const updateEstatGuardiaAdmin = async (req: Request, res: Response, next: NextFu
     })
 };
 
-export default { getGuardia, getAllGuardies, getGuardiesByDay, getGuardiesByDayAdmin, getMonthGuardiesByDate, getMonthGuardiesByDateFromTreballador, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };
+export default { getGuardia, getAllGuardies, getAllGuardiesFromTreballador, getGuardiesByDay, getGuardiesByDayAdmin, getMonthGuardiesByDate, getMonthGuardiesByDateFromTreballador, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };
