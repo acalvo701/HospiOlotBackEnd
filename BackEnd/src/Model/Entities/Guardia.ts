@@ -14,8 +14,7 @@ class Guardia extends Entity {
     private torn: Torn;
     private data: Date;
     private placesACobrir: number;
-    private coberta: boolean;
-    private treballadors: Array<Treballador>;
+    
 
 
     public constructor(id?: number, categoria?: Categoria, unitat?: Unitat, torn?: Torn, data?: Date, placesCobrir?: number, guardiaModel?: GuardiaModel) {
@@ -27,8 +26,8 @@ class Guardia extends Entity {
             this.unitat = guardiaModel.getU();
             this.placesACobrir = guardiaModel.getPlacesCobrir();
             this.data = data;
-
-        } else if (categoria && unitat && torn && placesCobrir) {
+        } 
+        else if (categoria && unitat && torn && placesCobrir) {
             this.categoria = categoria;
             this.unitat = unitat;
             this.torn = torn;

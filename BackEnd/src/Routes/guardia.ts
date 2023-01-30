@@ -9,6 +9,9 @@ router.get('/getGuardia',GuardiaController.getGuardia);
 router.get('/getAllGuardies',TreballadorController.validateToken,GuardiaController.getAllGuardies);
 router.get('/getGuardiesByDay',GuardiaController.getGuardiesByDay);
 router.get('/getMonthGuardiesByDate',GuardiaController.getMonthGuardiesByDate);
+router.get('/getMonthGuardiesByDateFromTreballador',GuardiaController.getMonthGuardiesByDateFromTreballador);
+
+
 
 router.post('/insertGuardia',GuardiaController.insertGuardia);
 router.post('/updateGuardia',GuardiaController.updateGuardia);
