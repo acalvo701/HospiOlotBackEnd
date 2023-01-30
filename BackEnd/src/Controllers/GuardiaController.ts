@@ -42,11 +42,13 @@ const getGuardia = async (req: Request, res: Response, next: NextFunction) => {
 const getGuardiesByDay = async (req: Request, res: Response, next: NextFunction) => {
         logging.info(NAMESPACE, "Getting guardies from specified day");
         const data = req.query.data;
+        const idTreballador = req.query.idTreballador;
        
         Connect().then((connection) => {
             let values = new Array<any>;
-            let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = ?";
+            let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = ? AND guardia.unitat IN (SELECT unitat FROM rol WHERE idTreballador = ?)";
             values['0'] = data;
+            values['1'] = idTreballador;
     
             PreparedQuery(connection, query, values)
                 .then((guardies) => {
