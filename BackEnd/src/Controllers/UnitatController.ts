@@ -36,6 +36,44 @@ const getAllUnitats = async (req: Request, res: Response, next: NextFunction) =>
 
 };
 
+const getUnitatsByIdTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting unitat/s");
+    const estat = 'ACTIU';
+    const idTreballador = req.body.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "SELECT nom FROM unitat WHERE estat = ? AND nom IN (SELECT unitat FROM rol WHERE idTreballador = ?);";
+        values['0'] = estat;
+        values['1'] = idTreballador;
+
+        PreparedQuery(connection, query, values)
+            .then((unitats) => {
+                logging.info(NAMESPACE, 'Retrieved unitat/s: ', unitats);
+                return res.status(200).json({
+                    unitats
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+
+};
+
 const insertUnitat = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Inserting unitat");
@@ -111,4 +149,4 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 
-export default { getAllUnitats, insertUnitat, updateEstat };
+export default { getAllUnitats, getUnitatsByIdTreballador, insertUnitat, updateEstat };
