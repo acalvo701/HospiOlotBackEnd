@@ -40,10 +40,10 @@ const getUnitatsByIdTreballador = async (req: Request, res: Response, next: Next
 
     logging.info(NAMESPACE, "Getting unitat/s");
     const estat = 'ACTIU';
-    const idTreballador = req.body.idTreballador;
+    const idTreballador = req.query.idTreballador;
 
     Connect().then((connection) => {
-        let values = new Array<string>;
+        let values = new Array<any>;
         let query = "SELECT nom FROM unitat WHERE estat = ? AND nom IN (SELECT unitat FROM rol WHERE idTreballador = ?)";
         values['0'] = estat;
         values['1'] = idTreballador;
