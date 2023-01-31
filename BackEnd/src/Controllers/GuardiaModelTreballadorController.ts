@@ -39,4 +39,42 @@ const getNomsEsquemaByIdTreballador = async (req: Request, res: Response, next: 
     })
 };
 
-export default { getNomsEsquemaByIdTreballador }
+const insertNomEsquemaByIdTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Inserting esquema name");
+
+    const idTreballador = req.body.idTreballador;
+    const nomEsquema = req.body.idTreballador;
+
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "INSERT INTO guardiamodeltreballador (idTreballador, nomEsquema) VALUES (?,?)";
+        values['0'] = idTreballador;
+        values['1'] = nomEsquema;
+
+        PreparedQuery(connection, query, values)
+            .then((esquema) => {
+                logging.info(NAMESPACE, 'Inserting esquema name: ', esquema);
+                return res.status(200).json({
+                    message: `Esquema name inserted!`
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
+export default { getNomsEsquemaByIdTreballador, insertNomEsquemaByIdTreballador }
