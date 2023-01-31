@@ -5,39 +5,6 @@ import GuardiaModel from "../Model/Entities/GuardiaModel";
 
 const NAMESPACE = "GuardiaModel";
 
-const getEsquema = async (req: Request, res: Response, next: NextFunction) => {
-
-    logging.info(NAMESPACE, "Getting esquema");
-
-    let query = "SELECT * FROM guardiamodel";
-
-    Connect().then((connection) => {
-        Query(connection, query)
-            .then((esquema) => {
-                logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
-                return res.status(200).json(
-                    esquema
-                );
-            })
-            .catch(error => {
-                logging.error(NAMESPACE, error.message, error);
-
-                return res.status(500).json({
-                    error
-                    
-                })
-            }).finally(() => {
-                connection.end();
-            })
-    }).catch(error => {
-        logging.error(NAMESPACE, error.message, error);
-
-        return res.status(500).json({
-            error
-        })
-    })
-};
-
 const getEsquemaByIdTreballadorAndName = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting esquema");
@@ -46,7 +13,7 @@ const getEsquemaByIdTreballadorAndName = async (req: Request, res: Response, nex
     const nomEsquema = req.query.nomEsquema;
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT id,categoria,unitat,torn,numeroPlaces,estat FROM guardiamodel WHERE idTreballador = ? AND nomEsquema = ?";
+        let query = "SELECT id,categoria,unitat,torn,numeroPlaces,estat FROM guardiamodel WHERE idGuardiaModelTreballador = (SELECT id FROM guardiamodeltreballador WHERE idTreballador = ? AND nomEsquema = ?)";
         values['0'] = idTreballador;
         values['1'] = nomEsquema;
 
