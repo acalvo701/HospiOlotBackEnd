@@ -5,7 +5,6 @@ import bcrypt = require("bcrypt");
 import jwt = require("jsonwebtoken");
 import User = require("../Model/Entities/User");
 import Token = require("../Model/Entities/Token");
-import Treballador = require("../Model/Entities/Treballador");
 import jwt_decode from "jwt-decode";
 const token = new Token();
 const NAMESPACE = "Treballadors";
@@ -220,7 +219,7 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 });
 
 const validateToken = (async (req, res, next) => {
-    console.log(req.headers);
+
     const accessToken = req.headers["authorization"].split(" ")[1];
     if (accessToken == null) {
         res.sendStatus(400).send("Token not present")
@@ -234,11 +233,6 @@ const validateToken = (async (req, res, next) => {
         })
     }
 
-})
-
-const authenticated = (async (req, res) => {
-    console.log(req.user)
-    res.send(`${req.user.user} is valid`)
 })
 
 const refreshToken = (async (req, res) => {
@@ -261,4 +255,4 @@ const refreshToken = (async (req, res) => {
 })
 
 
-export default { refreshToken, login,authenticated,validateToken,getTreballador, getAllTreballadors, insertTreballador, updateTreballador };
+export default { refreshToken, login,validateToken,getTreballador, getAllTreballadors, insertTreballador, updateTreballador };

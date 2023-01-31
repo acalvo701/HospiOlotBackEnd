@@ -1,5 +1,5 @@
 import express from "express";
-import TornController from "../Controllers/TornController";
+import TornController from "../Controllers/Admin/TornController";
 import TreballadorController from "../Controllers/TreballadorController";
 
 const router = express.Router();

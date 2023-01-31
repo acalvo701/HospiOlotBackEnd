@@ -1,6 +1,6 @@
 import express from "express";
 import TreballadorController from "../Controllers/TreballadorController";
-import UnitatController from "../Controllers/UnitatController";
+import UnitatController from "../Controllers/Admin/UnitatController";
 
 const router = express.Router();
 

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../config/logging";
 import { Connect, Query, PreparedQuery } from "../config/mysql";
+import Token from "../Model/Entities/Token";
 
 const NAMESPACE = "GuardiesTreballadors";
 
@@ -211,10 +212,8 @@ const getTreballadorsFromGuardia = async (req: Request, res: Response, next: Nex
 };
 
 const getHistoryTreballador = async (req: Request, res: Response, next: NextFunction) => {
-
-    logging.info(NAMESPACE, "Getting history treballador");
-
-    const idTreballador = req.query.idTreballador;
+   
+    const idTreballador = req['user'].id;
     //logging.error(NAMESPACE, idTreballador,idTreballador);
     Connect().then((connection) => {
         let values = new Array<any>;
