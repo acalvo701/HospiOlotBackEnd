@@ -3,6 +3,8 @@ import GuardiaModelTreballadorController from "../Controllers/GuardiaModelTrebal
 
 const router = express.Router();
 
-router.get('/getEsquema',GuardiaModelTreballadorController.getNomsEsquemaByIdTreballador);
+router.get('/getNomsEsquemaByIdTreballador',GuardiaModelTreballadorController.getNomsEsquemaByIdTreballador);
+
+router.post('/insertNomEsquemaByIdTreballador',GuardiaModelTreballadorController.insertNomEsquemaByIdTreballador);
 
 module.exports = router;
