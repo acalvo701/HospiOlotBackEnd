@@ -39,6 +39,44 @@ const getNomsEsquemaByIdTreballador = async (req: Request, res: Response, next: 
     })
 };
 
+
+const getNumberidGuardiaModelTreballador = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting esquema");
+
+    const idTreballador = req.query.idTreballador;
+    const nomEsquema = req.query.nomEsquema;
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = "SELECT id FROM guardiamodeltreballador WHERE idTreballador = ? AND nomEsquema = ?";
+        values['0'] = idTreballador;
+        values['1'] = nomEsquema;
+
+        PreparedQuery(connection, query, values)
+            .then((esquema) => {
+                logging.info(NAMESPACE, 'Getting esquema: ', esquema);
+                return res.status(200).json({
+                    esquema
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
 const insertNomEsquemaByIdTreballador = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Inserting esquema name");
@@ -77,4 +115,4 @@ const insertNomEsquemaByIdTreballador = async (req: Request, res: Response, next
     })
 };
 
-export default { getNomsEsquemaByIdTreballador, insertNomEsquemaByIdTreballador }
+export default { getNomsEsquemaByIdTreballador, getNumberidGuardiaModelTreballador, insertNomEsquemaByIdTreballador }

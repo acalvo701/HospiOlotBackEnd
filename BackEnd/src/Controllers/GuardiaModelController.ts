@@ -42,43 +42,6 @@ const getEsquemaByIdTreballadorAndName = async (req: Request, res: Response, nex
     })
 };
 
-const getNumberidGuardiaModelTreballador = async (req: Request, res: Response, next: NextFunction) => {
-
-    logging.info(NAMESPACE, "Getting esquema");
-
-    const idTreballador = req.query.idTreballador;
-    const nomEsquema = req.query.nomEsquema;
-    Connect().then((connection) => {
-        let values = new Array<any>;
-        let query = "SELECT idGuardiaModelTreballador FROM guardiamodel WHERE idGuardiaModelTreballador = (SELECT id FROM guardiamodeltreballador WHERE idTreballador = ? AND nomEsquema = ?)";
-        values['0'] = idTreballador;
-        values['1'] = nomEsquema;
-
-        PreparedQuery(connection, query, values)
-            .then((esquema) => {
-                logging.info(NAMESPACE, 'Getting esquema: ', esquema);
-                return res.status(200).json({
-                    esquema
-                });
-            })
-            .catch(error => {
-                logging.error(NAMESPACE, error.message, error);
-
-                return res.status(500).json({
-                    error
-                })
-            }).finally(() => {
-                connection.end();
-            })
-    }).catch(error => {
-        logging.error(NAMESPACE, error.message, error);
-
-        return res.status(500).json({
-            error
-        })
-    })
-};
-
 const insertEsquemaRow = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Inserting esquema row");
@@ -274,7 +237,7 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
 };
 
 
-export default { getEsquemaByIdTreballadorAndName, getNumberidGuardiaModelTreballador, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow, generarGuardiesEsquema };
+export default { getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow, generarGuardiesEsquema };
 
 
 function getDiumenges(diaInici: string, diaFi: string) {
