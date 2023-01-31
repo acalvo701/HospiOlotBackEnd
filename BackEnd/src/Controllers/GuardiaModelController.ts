@@ -237,7 +237,7 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
 };
 
 
-export default { getEsquema, getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow, generarGuardiesEsquema };
+export default { getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow, generarGuardiesEsquema };
 
 
 function getDiumenges(diaInici: string, diaFi: string) {
