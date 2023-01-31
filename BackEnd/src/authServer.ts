@@ -1,12 +1,12 @@
 import "dotenv/config";
 import express = require("express");
-import JsonWebTokenError = require("jsonwebtoken");
 const cors = require('cors');
 const app = express();
 
 const guardiaRoutes = require("./Routes/guardia.ts");
 const treballadorRoutes = require("./Routes/treballador.ts");
 const guardiaModelRoutes = require("./Routes/guardiamodel.ts");
+const guardiaModelTreballadorRoutes = require("./Routes/guardiamodel.ts");
 const guardiatreballadorRoutes = require("./Routes/guardiatreballador.ts");
 const tornRoutes = require("./Routes/torn.ts");
 const unitatRoutes = require("./Routes/unitat.ts");
@@ -18,6 +18,7 @@ app.use(express.json());
 app.use("/guardia", guardiaRoutes);
 app.use("/treballador", treballadorRoutes);
 app.use("/guardiamodel", guardiaModelRoutes);
+app.use("/guardiamodeltreballador", guardiaModelTreballadorRoutes);
 app.use("/guardiatreballador", guardiatreballadorRoutes);
 app.use("/torn", tornRoutes);
 app.use("/unitat", unitatRoutes);
