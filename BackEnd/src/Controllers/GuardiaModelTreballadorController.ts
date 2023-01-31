@@ -44,7 +44,7 @@ const insertNomEsquemaByIdTreballador = async (req: Request, res: Response, next
     logging.info(NAMESPACE, "Inserting esquema name");
 
     const idTreballador = req.body.idTreballador;
-    const nomEsquema = req.body.idTreballador;
+    const nomEsquema = req.body.nomEsquema;
 
     Connect().then((connection) => {
         let values = new Array<string>;
