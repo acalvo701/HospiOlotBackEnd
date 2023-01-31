@@ -11,7 +11,7 @@ const getNomsEsquemaByIdTreballador = async (req: Request, res: Response, next: 
     const idTreballador = req.query.idTreballador;
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT DISTINCT nomEsquema FROM guardiamodel WHERE idTreballador = ?";
+        let query = "SELECT nomEsquema FROM guardiamodeltreballador WHERE idTreballador = ?";
         values['0'] = idTreballador;
 
         PreparedQuery(connection, query, values)
