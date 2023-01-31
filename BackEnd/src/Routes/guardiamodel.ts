@@ -5,6 +5,7 @@ import TreballadorController from "../Controllers/TreballadorController";
 const router = express.Router();
 
 router.get('/getEsquemaByIdTreballadorAndName',TreballadorController.validateToken,GuardiaModelController.getEsquemaByIdTreballadorAndName);
+router.get('/getNumberidGuardiaModelTreballador',TreballadorController.validateToken,GuardiaModelController.getNumberidGuardiaModelTreballador);
 
 router.post('/insertEsquemaRow',TreballadorController.validateToken,GuardiaModelController.insertEsquemaRow);
 router.post('/updateEsquemaRow',TreballadorController.validateToken,GuardiaModelController.updateEsquemaRow);
