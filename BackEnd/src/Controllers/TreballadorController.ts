@@ -253,8 +253,8 @@ const refreshToken = (async (req, res) => {
         console.log("refreshing");
 
         let user = jwt_decode(refreshToken);
-        token.generateAccessToken(({ user: user }))
-        token.generateRefreshToken({ user: user })
+        token.generateAccessToken(user);
+        token.generateRefreshToken(user);
 
         res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
     }
