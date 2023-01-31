@@ -1,15 +1,12 @@
 import express from "express";
 import CategoriaController from "../Controllers/CategoriaController";
+import TreballadorController from "../Controllers/TreballadorController";
 
 const router = express.Router();
 
-// [GET]
+router.get('/getAllCategories', TreballadorController.validateToken,CategoriaController.getAllCategories);
 
-router.get('/getAllCategories', CategoriaController.getAllCategories);
-
-// [POST]
-
-router.post('/insertCategoria', CategoriaController.insertCategoria);
-router.post('/updateEstat', CategoriaController.updateEstat);
+router.post('/insertCategoria', TreballadorController.validateToken,CategoriaController.insertCategoria);
+router.post('/updateEstat', TreballadorController.validateToken,CategoriaController.updateEstat);
 
 module.exports = router;

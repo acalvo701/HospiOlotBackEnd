@@ -4,15 +4,15 @@ import TreballadorController from "../Controllers/TreballadorController";
 
 const router = express.Router();
 
-router.get('/countTreballadorsOfGuardia',GuardiaTreballadorController.countTreballadorsOfGuardia);
-router.get('/getHistoryTreballador',GuardiaTreballadorController.getHistoryTreballador);
-router.get('/getGuardiesFromTreballador',GuardiaTreballadorController.getGuardiesFromTreballador);
-router.get('/getTreballadorsFromGuardia',GuardiaTreballadorController.getTreballadorsFromGuardia);
+router.get('/countTreballadorsOfGuardia',TreballadorController.validateToken,GuardiaTreballadorController.countTreballadorsOfGuardia);
+router.get('/getHistoryTreballador',TreballadorController.validateToken,GuardiaTreballadorController.getHistoryTreballador);
+router.get('/getGuardiesFromTreballador',TreballadorController.validateToken,GuardiaTreballadorController.getGuardiesFromTreballador);
+router.get('/getTreballadorsFromGuardia',TreballadorController.validateToken,GuardiaTreballadorController.getTreballadorsFromGuardia);
 router.get('/getGuardiesByDayFromTreballador',TreballadorController.validateToken,GuardiaTreballadorController.getGuardiesByDayFromTreballador);
 
-router.post('/cancelGuardia',GuardiaTreballadorController.cancelGuardia);
-router.post('/bookGuardia',GuardiaTreballadorController.bookGuardia);
-router.post('/updateEstat',GuardiaTreballadorController.updateEstat);
-router.post('/insertarGuardiaTreballadorAdmin',GuardiaTreballadorController.insertarGuardiaTreballadorAdmin);
+router.post('/cancelGuardia',TreballadorController.validateToken,GuardiaTreballadorController.cancelGuardia);
+router.post('/bookGuardia',TreballadorController.validateToken,GuardiaTreballadorController.bookGuardia);
+router.post('/updateEstat',TreballadorController.validateToken,GuardiaTreballadorController.updateEstat);
+router.post('/insertarGuardiaTreballadorAdmin',TreballadorController.validateToken,GuardiaTreballadorController.insertarGuardiaTreballadorAdmin);
 
 module.exports = router;
