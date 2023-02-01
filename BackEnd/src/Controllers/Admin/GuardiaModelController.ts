@@ -56,13 +56,14 @@ const insertEsquemaRow = async (req: Request, res: Response, next: NextFunction)
     const idGuardiaModelTreballador = req.body.idGuardiaModelTreballador;
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "INSERT OR UPDATE guardiamodel (categoria,unitat,torn,numeroPlaces,estat,idGuardiaModelTreballador) VALUES (?,?,?,?,?,?)";
+        let query = "INSERT INTO guardiamodel (categoria,unitat,torn,numeroPlaces,estat,idGuardiaModelTreballador) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY estat = ?";
         values['0'] = categoria;
         values['1'] = unitat;
         values['2'] = torn;
         values['3'] = numeroPlaces;
         values['4'] = estat;
         values['5'] = idGuardiaModelTreballador;
+        values['6'] = estat;
 
         PreparedQuery(connection, query, values)
             .then((esquema) => {
