@@ -17,7 +17,7 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
     
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "SELECT * FROM treballador WHERE dni = ?";
+        let query = "SELECT id,dni,nom,password,categoria,estat, (SELECT id IN (SELECT rol.idTreballador from rol)) AS 'isAdmin' FROM hospiolot.treballador WHERE dni = ?;";
         values['0'] = dni;
         PreparedQuery(connection, query, values)
             .then(async (treballador) => {
@@ -30,8 +30,8 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
                     console.log(password);
                     if (await bcrypt.compare( password, treballador[0]['password'])) {
                         treballador = treballador[0];
-                        token.generateAccessToken({dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
-                        token.generateRefreshToken({dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
+                        token.generateAccessToken({isAdmin:treballador['isAdmin'],dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
+                        token.generateRefreshToken({isAdmin:treballador['isAdmin'],dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
                         res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
                     } else {
                         res.status(401).send("Dades incorrectes")
@@ -96,4 +96,15 @@ if (!token.refreshTokens.includes(refreshToken)) {
 }
 })
 
-export default { login, validateToken, refreshToken };
+const validateIsAdmin = (async (req, res, next) => {
+    const idTreballador = req['user'].id;
+    const isAdmin = req['user'].isAdmin;
+    
+    if (!isAdmin) {
+        res.sendStatus(400).send("Not Admin")
+    }else{
+        next();
+    }
+    
+    })
+export default { login, validateToken, refreshToken,validateIsAdmin };
