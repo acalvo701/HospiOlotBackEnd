@@ -1,6 +1,6 @@
 import express from "express";
 import TornController from "../../Controllers/Admin/TornController";
-import TokenController from "../../Controllers/TokenController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
 
 const router = express.Router();
 

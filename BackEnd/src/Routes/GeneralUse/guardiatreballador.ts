@@ -1,6 +1,6 @@
 import express from "express";
-import GuardiaTreballadorController from "../Controllers/GuardiaTreballadorController";
-import TokenController from "../Controllers/TokenController";
+import GuardiaTreballadorController from "../../Controllers/GeneralUse/GuardiaTreballadorController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
 
 const router = express.Router();
 

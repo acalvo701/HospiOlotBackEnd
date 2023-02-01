@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import logging from "../config/logging";
-import { Connect, Query, PreparedQuery } from "../config/mysql";
+import logging from "../../config/logging";
+import { Connect, Query, PreparedQuery } from "../../config/mysql";
 import bcrypt = require("bcrypt");
 import jwt = require("jsonwebtoken");
-import User = require("../Model/Entities/User");
-import Token = require("../Model/Entities/Token");
+import User = require("../../Model/Entities/User");
+import Token = require("../../Model/Entities/Token");
 import jwt_decode from "jwt-decode";
 const token = new Token();
 const NAMESPACE = "Treballadors";

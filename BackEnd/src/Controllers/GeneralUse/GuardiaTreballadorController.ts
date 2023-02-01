@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import logging from "../config/logging";
-import { Connect, Query, PreparedQuery } from "../config/mysql";
-import Token from "../Model/Entities/Token";
+import logging from "../../config/logging";
+import { Connect, Query, PreparedQuery } from "../../config/mysql";
+import Token from "../../Model/Entities/Token";
 
 const NAMESPACE = "GuardiesTreballadors";
 
@@ -9,7 +9,7 @@ const bookGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Booking guardia");
 
-    const idTreballador = req.query.idTreballador;
+    const idTreballador = req['user'].id;
     const idGuardia = req.query.idGuardia;
 
     Connect().then((connection) => {
@@ -89,7 +89,7 @@ const getGuardiesByDayFromTreballador = async (req: Request, res: Response, next
 
     logging.info(NAMESPACE, "Getting guardies from treballador on given day");
     const dia = req.query.dia;
-    const idTreballador = req.query.idTreballador;
+    const idTreballador = req['user'].id;
 
     Connect().then((connection) => {
         let values = new Array<any>;
@@ -214,7 +214,6 @@ const getTreballadorsFromGuardia = async (req: Request, res: Response, next: Nex
 const getHistoryTreballador = async (req: Request, res: Response, next: NextFunction) => {
    
     const idTreballador = req['user'].id;
-    //logging.error(NAMESPACE, idTreballador,idTreballador);
     Connect().then((connection) => {
         let values = new Array<any>;
         let query = "SELECT dia,gt.estat,torn,unitat,categoria FROM guardia LEFT JOIN guardiatreballador gt ON guardia.id = gt.idGuardia WHERE gt.idTreballador = ? AND UPPER(gt.estat) IN ('PENDENT','ASSIGNADA') ORDER BY dia ASC";
@@ -324,7 +323,7 @@ const updateEstat = async (req: Request, res: Response, next: NextFunction) => {
 const cancelGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Canceling guardia");
-    const idTreballador = req.query.idTreballador;
+    const idTreballador = req['user'].id;
     const idGuardia = req.query.idGuardia;
 
     Connect().then((connection) => {

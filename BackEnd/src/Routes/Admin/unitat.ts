@@ -1,5 +1,5 @@
 import express from "express";
-import TokenController from "../../Controllers/TokenController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
 import UnitatController from "../../Controllers/Admin/UnitatController";
 
 const router = express.Router();

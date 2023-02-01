@@ -1,6 +1,6 @@
 import express from "express";
 import HistorialController from "../../Controllers/Admin/HistorialController";
-import TokenController from "../../Controllers/TokenController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 import express from "express";
-import TokenController from "../../Controllers/TokenController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
 import JsonWebTokenError = require("jsonwebtoken");
-import TreballadorController from "../../Controllers/TreballadorController";
+import TreballadorController from "../../Controllers/Admin/TreballadorController";
 const router = express.Router();
 
 router.get('/getTreballador',TokenController.validateToken,TreballadorController.getTreballador);

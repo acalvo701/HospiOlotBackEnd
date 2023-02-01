@@ -1,6 +1,6 @@
 import express from "express";
-import GuardiaModelController from "../Controllers/Admin/GuardiaModelController";
-import TokenController from "../Controllers/TokenController";
+import GuardiaModelController from "../../Controllers/Admin/GuardiaModelController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
 
 const router = express.Router();
 

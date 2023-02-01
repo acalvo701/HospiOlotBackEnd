@@ -1,7 +1,7 @@
 import express from "express";
 import CategoriaController from "../../Controllers/Admin/CategoriaController";
-import TokenController from "../../Controllers/TokenController";
-import TreballadorController from "../../Controllers/TreballadorController";
+import TokenController from "../../Controllers/GeneralUse/TokenController";
+import TreballadorController from "../../Controllers/Admin/TreballadorController";
 
 const router = express.Router();
 

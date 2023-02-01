@@ -1,5 +1,5 @@
 import express from "express";
-import GuardiaModelTreballadorController from "../Controllers/Admin/GuardiaModelTreballadorController";
+import GuardiaModelTreballadorController from "../../Controllers/Admin/GuardiaModelTreballadorController";
 
 const router = express.Router();
 
