@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import logging from "../../config/logging";
 import { Connect, PreparedQuery, Query } from "../../config/mysql";
-import HistorialController from "../HistorialController";
+import HistorialController from "./HistorialController";
 
 const NAMESPACE = "Torn";
 

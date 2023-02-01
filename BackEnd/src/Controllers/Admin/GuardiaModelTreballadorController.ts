@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import logging from "../config/logging";
-import { Connect, Query, PreparedQuery, BulkPreparedQuery } from "../config/mysql";
+import logging from "../../config/logging";
+import { Connect, Query, PreparedQuery, BulkPreparedQuery } from "../../config/mysql";
 
 const NAMESPACE = "GuardiaModelTreballador";
 
@@ -11,50 +11,12 @@ const getNomsEsquemaByIdTreballador = async (req: Request, res: Response, next: 
     const idTreballador = req.query.idTreballador;
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT nomEsquema FROM guardiamodeltreballador WHERE idTreballador = ?";
+        let query = "SELECT id, nomEsquema FROM guardiamodeltreballador WHERE idTreballador = ?";
         values['0'] = idTreballador;
 
         PreparedQuery(connection, query, values)
             .then((esquema) => {
                 logging.info(NAMESPACE, 'Getting esquema names: ', esquema);
-                return res.status(200).json({
-                    esquema
-                });
-            })
-            .catch(error => {
-                logging.error(NAMESPACE, error.message, error);
-
-                return res.status(500).json({
-                    error
-                })
-            }).finally(() => {
-                connection.end();
-            })
-    }).catch(error => {
-        logging.error(NAMESPACE, error.message, error);
-
-        return res.status(500).json({
-            error
-        })
-    })
-};
-
-
-const getNumberidGuardiaModelTreballador = async (req: Request, res: Response, next: NextFunction) => {
-
-    logging.info(NAMESPACE, "Getting esquema");
-
-    const idTreballador = req.query.idTreballador;
-    const nomEsquema = req.query.nomEsquema;
-    Connect().then((connection) => {
-        let values = new Array<any>;
-        let query = "SELECT id FROM guardiamodeltreballador WHERE idTreballador = ? AND nomEsquema = ?";
-        values['0'] = idTreballador;
-        values['1'] = nomEsquema;
-
-        PreparedQuery(connection, query, values)
-            .then((esquema) => {
-                logging.info(NAMESPACE, 'Getting esquema: ', esquema);
                 return res.status(200).json({
                     esquema
                 });
@@ -115,4 +77,4 @@ const insertNomEsquemaByIdTreballador = async (req: Request, res: Response, next
     })
 };
 
-export default { getNomsEsquemaByIdTreballador, getNumberidGuardiaModelTreballador, insertNomEsquemaByIdTreballador }
+export default { getNomsEsquemaByIdTreballador, insertNomEsquemaByIdTreballador }

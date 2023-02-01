@@ -245,7 +245,6 @@ const getHistoryTreballador = async (req: Request, res: Response, next: NextFunc
     })
 };
 
-
 const countTreballadorsOfGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Counting guard's workers");

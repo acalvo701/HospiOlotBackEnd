@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import logging from "../config/logging";
-import { Connect, Query, PreparedQuery, BulkPreparedQuery } from "../config/mysql";
-import GuardiaModel from "../Model/Entities/GuardiaModel";
+import logging from "../../config/logging";
+import { Connect, Query, PreparedQuery, BulkPreparedQuery } from "../../config/mysql";
+import GuardiaModel from "../../Model/Entities/GuardiaModel";
 
 const NAMESPACE = "GuardiaModel";
 
@@ -51,14 +51,16 @@ const insertEsquemaRow = async (req: Request, res: Response, next: NextFunction)
     const torn = req.body.torn;
     const numeroPlaces = req.body.numeroPlaces;
     const estat = req.body.estat;
+    const idGuardiaModelTreballador = req.body.idGuardiaModelTreballador;
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "INSERT INTO guardiamodel (categoria,unitat,torn,numeroPlaces,estat) VALUES (?,?,?,?,?)";
+        let query = "INSERT INTO guardiamodel (categoria,unitat,torn,numeroPlaces,estat,idGuardiaModelTreballador) VALUES (?,?,?,?,?,?)";
         values['0'] = categoria;
         values['1'] = unitat;
         values['2'] = torn;
         values['3'] = numeroPlaces;
         values['4'] = estat;
+        values['5'] = idGuardiaModelTreballador;
 
         PreparedQuery(connection, query, values)
             .then((esquema) => {

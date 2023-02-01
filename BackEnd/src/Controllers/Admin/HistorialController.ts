@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import logging from "../config/logging";
-import { Connect, Query, PreparedQuery } from "../config/mysql";
+import logging from "../../config/logging";
+import { Connect, Query, PreparedQuery } from "../../config/mysql";
 
 const NAMESPACE = "GuardiesTreballadors";
 
