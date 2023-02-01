@@ -171,10 +171,13 @@ const deleteEsquemaRow = async (req: Request, res: Response, next: NextFunction)
 
 const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFunction) => {
   
-    let query = "SELECT * FROM guardiamodel";
-    let esquemaReturn;
+    const idGuardiaModelTreballador = req.body.idGuardiaModelTreballador;
     Connect().then((connection) => {
-        Query(connection, query)
+        let values = new Array<string>;
+        let query = "SELECT * FROM guardiamodel WHERE idGuardiaModelTreballador = ?";
+        values['0'] = idGuardiaModelTreballador;
+
+        PreparedQuery(connection, query, values)
             .then((esquema:Array<GuardiaModel>) => {
                 // logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
                 const diaInici = req.body.diaInici;
