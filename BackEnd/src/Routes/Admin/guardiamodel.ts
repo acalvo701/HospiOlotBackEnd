@@ -8,7 +8,7 @@ router.get('/getEsquemaByIdTreballadorAndName',TokenController.validateTokenAdmi
 
 router.post('/insertEsquemaRow',TokenController.validateTokenAdmin,GuardiaModelController.insertEsquemaRow);
 router.post('/updateEsquemaRow',TokenController.validateTokenAdmin,GuardiaModelController.updateEsquemaRow);
-router.post('/deleteEsquemaRow',TokenController.validateTokenAdmin,GuardiaModelController.deleteEsquemaRow);
+router.post('/estatEliminatEsquemaRow',TokenController.validateTokenAdmin,GuardiaModelController.estatEliminatEsquemaRow);
 router.post('/generarGuardiesEsquema',TokenController.validateTokenAdmin,GuardiaModelController.generarGuardiesEsquema);
 
 module.exports = router;

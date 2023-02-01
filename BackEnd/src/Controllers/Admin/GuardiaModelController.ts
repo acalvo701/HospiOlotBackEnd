@@ -134,15 +134,16 @@ const updateEsquemaRow = async (req: Request, res: Response, next: NextFunction)
 
 };
 
-const deleteEsquemaRow = async (req: Request, res: Response, next: NextFunction) => {
+const estatEliminatEsquemaRow = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Deleting esquema row");
 
     const id = req.body.id;
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "DELETE FROM guardiamodel WHERE id = ?";
-        values['0'] = id;
+        let query = "UPDATE guardiamodel SET estat = ? WHERE id = ?";
+        values['0'] = 'ELIMINAT';
+        values['1'] = id;
 
         PreparedQuery(connection, query, values)
             .then((esquema) => {
@@ -201,10 +202,6 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
                         values.push(guardia);
                         guardia = [];
                     });
-                   
-                   
-            
-            
                 });
                 
                 BulkPreparedQuery(connection, sql,values)
@@ -241,7 +238,7 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
 };
 
 
-export default { getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, deleteEsquemaRow, generarGuardiesEsquema };
+export default { getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, estatEliminatEsquemaRow, generarGuardiesEsquema };
 
 
 function getDiumenges(diaInici: string, diaFi: string) {
