@@ -77,6 +77,30 @@ if (accessToken == null) {
 
 })
 
+const validateTokenAdmin = (async (req, res, next) => {
+
+    const accessToken = req.headers["authorization"].split(" ")[1];
+    if (accessToken == null) {
+        res.sendStatus(400).send("Token not present")
+    } else {
+        jwt.verify(accessToken, token.secret, (err, user) => {
+            if (err) res.status(403).send("Token invalid")
+            else {
+                const isAdmin = user.isAdmin;
+                if (!isAdmin) {
+                    res.status(403).send("Not admin")
+                }else{
+                    req.user = user
+                    next();
+                }
+                
+            }
+        })
+    }
+    
+    })
+
+
 const refreshToken = (async (req, res) => {
 
 const refreshToken = req.body.refreshToken;
@@ -96,15 +120,13 @@ if (!token.refreshTokens.includes(refreshToken)) {
 }
 })
 
-const validateIsAdmin = (async (req, res, next) => {
-    const idTreballador = req['user'].id;
-    const isAdmin = req['user'].isAdmin;
+// const validateIsAdmin = (async (req, res, next) => {
+//     const idTreballador = req['user'].id;
     
-    if (!isAdmin) {
-        res.sendStatus(400).send("Not Admin")
-    }else{
-        next();
-    }
     
-    })
-export default { login, validateToken, refreshToken,validateIsAdmin };
+//     else{
+//         next();
+//     }
+    
+//     })
+export default { login, validateToken, refreshToken,validateTokenAdmin };

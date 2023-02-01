@@ -5,9 +5,9 @@ import TreballadorController from "../../Controllers/Admin/TreballadorController
 
 const router = express.Router();
 
-router.get('/getAllCategories', TokenController.validateToken,CategoriaController.getAllCategories);
+router.get('/getAllCategories', TokenController.validateTokenAdmin,CategoriaController.getAllCategories);
 
-router.post('/insertCategoria', TokenController.validateToken,CategoriaController.insertCategoria);
-router.post('/updateEstat', TokenController.validateToken,CategoriaController.updateEstat);
+router.post('/insertCategoria', TokenController.validateTokenAdmin,CategoriaController.insertCategoria);
+router.post('/updateEstat', TokenController.validateTokenAdmin,CategoriaController.updateEstat);
 
 module.exports = router;

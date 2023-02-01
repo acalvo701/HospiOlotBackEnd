@@ -184,8 +184,7 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
                 const diaFi = req.body.diaFi;
             
                 const diumenges = getDiumenges(diaInici,diaFi);
-               
-                var sql = "INSERT INTO guardia (categoria,unitat,torn,dia,numeroPlaces) VALUES ?";
+                var sql = "INSERT INTO guardia (categoria,unitat,torn,dia,numeroPlaces) VALUES ? ON DUPLICATE KEY UPDATE numeroPlaces = numeroPlaces";
                 
                 let guardia = [];
                 var values = [];
