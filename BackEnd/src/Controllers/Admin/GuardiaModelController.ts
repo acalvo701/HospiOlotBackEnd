@@ -13,11 +13,10 @@ const getEsquemaByIdTreballadorAndName = async (req: Request, res: Response, nex
     const nomEsquema = req.query.nomEsquema;
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT id,categoria,unitat,torn,numeroPlaces,estat,idGuardiaModelTreballador FROM guardiamodel WHERE idGuardiaModelTreballador = (SELECT id FROM guardiamodeltreballador WHERE idTreballador = ? AND nomEsquema = ?)  AND estat IN (?,?)";
+        let query = "SELECT id,categoria,unitat,torn,numeroPlaces,estat,idGuardiaModelTreballador FROM guardiamodel WHERE idGuardiaModelTreballador = (SELECT id FROM guardiamodeltreballador WHERE idTreballador = ? AND nomEsquema = ?) AND estat NOT IN (?)";
         values['0'] = idTreballador;
         values['1'] = nomEsquema;
-        values['2'] = 'ACTIU';
-        values['3'] = 'INACTIU';
+        values['2'] = 'ELIMINAT';
 
         PreparedQuery(connection, query, values)
             .then((esquema) => {
