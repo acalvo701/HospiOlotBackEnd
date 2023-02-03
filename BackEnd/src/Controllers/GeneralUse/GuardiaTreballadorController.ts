@@ -325,7 +325,7 @@ const cancelGuardia = async (req: Request, res: Response, next: NextFunction) =>
     logging.info(NAMESPACE, "Canceling guardia");
     const idTreballador = req['user'].id;
     const idGuardia = req.query.idGuardia;
-
+console.log(req);
     Connect().then((connection) => {
         let values = new Array<any>;
         let query = "UPDATE guardiatreballador SET estat = 'CANCELADA' WHERE idTreballador = ? AND idGuardia = ?";
