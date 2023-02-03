@@ -5,6 +5,7 @@ import TokenController from "../../Controllers/GeneralUse/TokenController";
 const router = express.Router();
 
 router.get('/getGuardiesByDayAdmin',TokenController.validateToken,GuardiaAdminController.getGuardiesByDayAdmin);
+router.get('/getTreballadorsFromGuardiaAdmin',TokenController.validateToken,GuardiaAdminController.getTreballadorsFromGuardiaAdmin);
 
 router.post('/insertGuardia',TokenController.validateToken,GuardiaAdminController.insertGuardia);
 router.post('/updateGuardia',TokenController.validateToken,GuardiaAdminController.updateGuardia);

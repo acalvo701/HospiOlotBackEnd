@@ -42,6 +42,42 @@ const getGuardiesByDayAdmin = async (req: Request, res: Response, next: NextFunc
 
 };
 
+const getTreballadorsFromGuardiaAdmin = async (req: Request, res: Response, next: NextFunction) => {
+
+    logging.info(NAMESPACE, "Getting treballadors from guardia");
+
+    const idGuardia = req.query.idGuardia;
+
+    Connect().then((connection) => {
+        let values = new Array<any>;
+        let query = "SELECT nom,gt.estat FROM treballador LEFT JOIN guardiatreballador gt ON treballador.id = gt.idTreballador WHERE gt.idGuardia = ?";
+        values['0'] = idGuardia;
+
+        PreparedQuery(connection, query, values)
+            .then((treballadors) => {
+                logging.info(NAMESPACE, 'Treballador: ', treballadors);
+                return res.status(200).json({
+                    treballadors
+                });
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+
+        return res.status(500).json({
+            error
+        })
+    })
+};
+
 const insertGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Inserting guardia");
@@ -170,4 +206,4 @@ const updateEstatGuardiaAdmin = async (req: Request, res: Response, next: NextFu
     })
 };
 
-export default { getGuardiesByDayAdmin, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };
+export default { getGuardiesByDayAdmin, getTreballadorsFromGuardiaAdmin, insertGuardia, updateGuardia, updateEstatGuardiaAdmin };
