@@ -62,10 +62,9 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 });
 
 const validateToken = (async (req, res, next) => {
-
-    if(!req.headers["authorization"]){
+    if (!req.headers["authorization"]) {
         res.status(400).send("Token not present");
-    }else{
+    } else {
         const accessToken = req.headers["authorization"].split(" ")[1];
         if (accessToken == null) {
             res.status(400).send("Token not present")
@@ -81,29 +80,33 @@ const validateToken = (async (req, res, next) => {
             })
         }
     }
-    
+
 
 })
 
 const validateTokenAdmin = (async (req, res, next) => {
 
-    const accessToken = req.headers["authorization"].split(" ")[1];
-    if (accessToken == null) {
-        res.sendStatus(400).send("Token not present")
+    if (!req.headers["authorization"]) {
+        res.status(400).send("Token not present");
     } else {
-        jwt.verify(accessToken, token.secret, (err, user) => {
-            if (err) res.status(403).send("Token invalid")
-            else {
-                const isAdmin = user.isAdmin;
-                if (!isAdmin) {
-                    res.status(403).send("Not admin")
-                } else {
-                    req.user = user
-                    next();
-                }
+        const accessToken = req.headers["authorization"].split(" ")[1];
+        if (accessToken == null) {
+            res.sendStatus(400).send("Token not present")
+        } else {
+            jwt.verify(accessToken, token.secret, (err, user) => {
+                if (err) res.status(403).send("Token invalid")
+                else {
+                    const isAdmin = user.isAdmin;
+                    if (!isAdmin) {
+                        res.status(403).send("Not admin")
+                    } else {
+                        req.user = user
+                        next();
+                    }
 
-            }
-        })
+                }
+            })
+        }
     }
 
 })

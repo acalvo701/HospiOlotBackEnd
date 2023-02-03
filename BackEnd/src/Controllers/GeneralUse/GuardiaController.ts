@@ -149,9 +149,13 @@ const getAllGuardiesFromTreballador = async (req: Request, res: Response, next: 
 
     logging.info(NAMESPACE, "Getting guardies from treballador");
     const idTreballador = req['user'].id;
+    console.log(idTreballador);
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT guardiatreballador.estat,guardia.dia FROM guardiatreballador INNER JOIN guardia ON guardiatreballador.idGuardia = guardia.id WHERE guardia.id IN (SELECT idGuardia from guardiatreballador WHERE idTreballador=?)";
+        let query = `SELECT guardiatreballador.estat,guardia.dia
+        FROM guardiatreballador 
+        INNER JOIN guardia ON guardiatreballador.idGuardia = guardia.id
+        WHERE guardiatreballador.idTreballador = ?`;
         values['0'] = idTreballador;
         PreparedQuery(connection, query, values)
             .then((guardies) => {

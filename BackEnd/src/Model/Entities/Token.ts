@@ -12,11 +12,11 @@ class Token {
     }
 
     generateAccessToken(user) {
-        this.accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "2h"}) 
+        this.accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"}) 
     }
 
     generateRefreshToken(user) {
-        this.refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "3h"})
+        this.refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, {expiresIn: "30m"})
         this.refreshTokens.push(this.refreshToken);
     }
 

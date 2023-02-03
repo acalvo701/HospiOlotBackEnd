@@ -12,10 +12,14 @@ const getGuardiesByDayAdmin = async (req: Request, res: Response, next: NextFunc
 
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = "SELECT *,(SELECT COUNT(*) FROM guardiatreballador WHERE guardiatreballador.idGuardia = guardia.id AND guardiatreballador.estat != 'CANCELADA') as 'personesApuntades' FROM guardia WHERE guardia.dia = ? AND guardia.unitat IN (SELECT unitat FROM rol WHERE idTreballador = ?)";
-        values['0'] = data;
-        values['1'] = idTreballador;
-
+        let query = `SELECT id,categoria,guardia.unitat,torn,dia,numeroPlaces,guardiatreballador.idGuardia,guardiatreballador.idTreballador,guardiatreballador.estat as 'estatTreballador'
+        FROM guardia LEFT JOIN guardiatreballador ON guardiatreballador.idGuardia = guardia.id 
+        WHERE guardia.unitat IN (SELECT rol.unitat FROM rol WHERE rol.idTreballador = ?) AND   dia=? AND guardia.estat = 'ACTIU'
+        and (guardiatreballador.estat ='PENDENT' OR isnull(guardiatreballador.estat))
+        `;
+        values['0'] = idTreballador;
+        values['1'] = data;
+        
         PreparedQuery(connection, query, values)
             .then((guardies) => {
                 logging.info(NAMESPACE, 'Retrieved guardies: ', guardies);
@@ -39,7 +43,7 @@ const getGuardiesByDayAdmin = async (req: Request, res: Response, next: NextFunc
             error
         })
     })
-A
+
 };
 
 const getTreballadorsFromGuardiaAdmin = async (req: Request, res: Response, next: NextFunction) => {
