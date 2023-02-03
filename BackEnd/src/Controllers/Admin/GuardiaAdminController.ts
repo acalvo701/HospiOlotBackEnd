@@ -39,7 +39,7 @@ const getGuardiesByDayAdmin = async (req: Request, res: Response, next: NextFunc
             error
         })
     })
-
+A
 };
 
 const getTreballadorsFromGuardiaAdmin = async (req: Request, res: Response, next: NextFunction) => {

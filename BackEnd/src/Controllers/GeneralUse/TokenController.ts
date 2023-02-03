@@ -6,6 +6,7 @@ import jwt = require("jsonwebtoken");
 import User = require("../../Model/Entities/User");
 import Token = require("../../Model/Entities/Token");
 import jwt_decode from "jwt-decode";
+import { JsonWebTokenError, NotBeforeError, TokenExpiredError } from "jsonwebtoken";
 const token = new Token();
 const NAMESPACE = "Treballadors";
 
@@ -13,8 +14,8 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Logging in");
     const dni = req.body.dni;
-    const password =(req.body.password);
-    
+    const password = (req.body.password);
+
     Connect().then((connection) => {
         let values = new Array<string>;
         let query = "SELECT id,dni,nom,password,categoria,estat, (SELECT id IN (SELECT rol.idTreballador from rol)) AS 'isAdmin' FROM hospiolot.treballador WHERE dni = ?;";
@@ -22,22 +23,22 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
         PreparedQuery(connection, query, values)
             .then(async (treballador) => {
                 logging.info(NAMESPACE, 'Retrieved treballador: ', treballador);
-               
-                
+
+
                 if (treballador === null || treballador === undefined || (Array.isArray(treballador) && treballador.length === 0)) {
                     res.status(404).send("Usuari o password no vàlid")
                 } else {
                     console.log(password);
-                    if (await bcrypt.compare( password, treballador[0]['password'])) {
+                    if (await bcrypt.compare(password, treballador[0]['password'])) {
                         treballador = treballador[0];
-                        token.generateAccessToken({isAdmin:treballador['isAdmin'],dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
-                        token.generateRefreshToken({isAdmin:treballador['isAdmin'],dni:treballador['dni'],categoria:treballador['categoria'],nom:treballador['nom'],id:treballador['id']});
+                        token.generateAccessToken({ isAdmin: treballador['isAdmin'], dni: treballador['dni'], categoria: treballador['categoria'], nom: treballador['nom'], id: treballador['id'] });
+                        token.generateRefreshToken({ isAdmin: treballador['isAdmin'], dni: treballador['dni'], categoria: treballador['categoria'], nom: treballador['nom'], id: treballador['id'] });
                         res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
                     } else {
                         res.status(401).send("Dades incorrectes")
                     }
-            
-                  
+
+
                 }
 
             })
@@ -62,18 +63,25 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 
 const validateToken = (async (req, res, next) => {
 
-const accessToken = req.headers["authorization"].split(" ")[1];
-if (accessToken == null) {
-    res.sendStatus(400).send("Token not present")
-} else {
-    jwt.verify(accessToken, token.secret, (err, user) => {
-        if (err) res.status(403).send("Token invalid")
-        else {
-            req.user = user
-            next();
+    if(!req.headers["authorization"]){
+        res.status(400).send("Token not present");
+    }else{
+        const accessToken = req.headers["authorization"].split(" ")[1];
+        if (accessToken == null) {
+            res.status(400).send("Token not present")
+        } else {
+            jwt.verify(accessToken, token.secret, (err, user) => {
+                if (err) {
+                    res.status(403).send("Token invalid")
+                }
+                else {
+                    req.user = user
+                    next();
+                }
+            })
         }
-    })
-}
+    }
+    
 
 })
 
@@ -89,44 +97,51 @@ const validateTokenAdmin = (async (req, res, next) => {
                 const isAdmin = user.isAdmin;
                 if (!isAdmin) {
                     res.status(403).send("Not admin")
-                }else{
+                } else {
                     req.user = user
                     next();
                 }
-                
+
             }
         })
     }
-    
-    })
+
+})
 
 
 const refreshToken = (async (req, res) => {
+    const refreshTokenValue = req.body.refreshToken;
 
-const refreshToken = req.body.refreshToken;
-console.log(refreshToken);
-if (!token.refreshTokens.includes(refreshToken)) {
-    res.status(400).send("Refresh token invalid");
-} else {
-    token.eliminarRefreshToken(refreshToken);
+    await jwt.verify(refreshTokenValue, process.env.REFRESH_TOKEN_SECRET || '', (err: any, user: any) => {
+        if (err instanceof TokenExpiredError) {
+            res.status(401).send({ success: false, message: 'Unauthorized! Access Token was expired!' });
+        } else if (err instanceof NotBeforeError) {
+            res.status(401).send({ success: false, message: 'jwt not active' });
+        }
+        else if (err instanceof JsonWebTokenError) {
+            res.status(401).send({ success: false, message: 'jwt malformed' });
+        } else if (err) {
+            res.status(401).send({ success: false, message: 'Token invalid' });
+        } else {
+            var info = { isAdmin: user['isAdmin'], dni: user['dni'], categoria: user['categoria'], nom: user['nom'], id: user['id'] };
+            token.generateAccessToken(info);
+            token.generateRefreshToken(info);
 
-    console.log("refreshing");
+            res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
+        }
 
-    let user = jwt_decode(refreshToken);
-    token.generateAccessToken(user);
-    token.generateRefreshToken(user);
+    });
 
-    res.json({ accessToken: token.accessToken, refreshToken: token.refreshToken })
-}
-})
+
+});
 
 // const validateIsAdmin = (async (req, res, next) => {
 //     const idTreballador = req['user'].id;
-    
-    
+
+
 //     else{
 //         next();
 //     }
-    
+
 //     })
-export default { login, validateToken, refreshToken,validateTokenAdmin };
+export default { login, validateToken, refreshToken, validateTokenAdmin };
