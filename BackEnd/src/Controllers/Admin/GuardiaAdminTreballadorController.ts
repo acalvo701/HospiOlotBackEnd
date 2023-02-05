@@ -7,10 +7,10 @@ const NAMESPACE = "GuardiesTreballadors";
 const getNomsTreballadorsNotInGuardia = async (req: Request, res: Response, next: NextFunction) => {
 
     logging.info(NAMESPACE, "Getting noms");
-    const idGuardia = req.body.idGuardia;
+    const idGuardia = req.query.idGuardia;
 
     Connect().then((connection) => {
-        let values = new Array<string>;
+        let values = new Array<any>;
         let query = "SELECT treballador.nom FROM treballador WHERE treballador.id NOT IN (SELECT guardiatreballador.idTreballador from guardia INNER JOIN guardiatreballador ON guardia.id = guardiatreballador.idguardia WHERE guardia.id=?)";
         values['0'] = idGuardia;
 
