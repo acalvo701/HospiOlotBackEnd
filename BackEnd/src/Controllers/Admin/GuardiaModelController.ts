@@ -178,7 +178,7 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
     const idGuardiaModelTreballador = req.body.idGuardiaModelTreballador;
     Connect().then((connection) => {
         let values = new Array<string>;
-        let query = "SELECT * FROM guardiamodel WHERE idGuardiaModelTreballador = ?";
+        let query = "SELECT * FROM guardiamodel WHERE idGuardiaModelTreballador = ? AND guardiamodel.estat = 'ACTIU'";
         values['0'] = idGuardiaModelTreballador;
 
         PreparedQuery(connection, query, values)
@@ -240,8 +240,72 @@ const generarGuardiesEsquema = async (req: Request, res: Response, next: NextFun
    
 };
 
+const generarGuardiesCSV = async (req: Request, res: Response, next: NextFunction) => {
+  
+    const idEsquema = req.body.idEsquema;
+    const arrayDates = req.body.arrayDates;
+    Connect().then((connection) => {
+        let values = new Array<string>;
+        let query = "SELECT * FROM guardiamodel WHERE idGuardiaModelTreballador = ? AND guardiamodel.estat = 'ACTIU' ";
+        values['0'] = idEsquema;
 
-export default { getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, estatEliminatEsquemaRow, generarGuardiesEsquema };
+        PreparedQuery(connection, query, values)
+            .then((esquema:Array<GuardiaModel>) => {
+                // logging.info(NAMESPACE, 'Retrieved esquema: ', esquema);
+
+                var sql = "INSERT INTO guardia (categoria,unitat,torn,dia,numeroPlaces) VALUES ? ON DUPLICATE KEY UPDATE numeroPlaces = numeroPlaces";
+                
+                let guardia = [];
+                var values = [];
+
+                arrayDates.forEach(data => {
+                    
+                    esquema.forEach(guardiaModel => {
+
+                        guardia.push(guardiaModel.categoria);
+                        guardia.push(guardiaModel.unitat);
+                        guardia.push(guardiaModel.torn);
+                        guardia.push(data)
+                        guardia.push(guardiaModel.numeroPlaces);
+                        values.push(guardia);
+                        guardia = [];
+                    });
+                });
+                
+                BulkPreparedQuery(connection, sql,values)
+                .then((response:any) =>{
+                    return res.status(200).json({
+                        message: `Guardies generades`
+                    });
+                }).catch(error =>{
+                    logging.error(NAMESPACE, error.message, error);
+                    return res.status(500).json({
+                        error
+                    })
+                });
+
+            })
+            .catch(error => {
+                logging.error(NAMESPACE, error.message, error);
+               
+                return res.status(500).json({
+                    error
+                })
+            }).finally(() => {
+                connection.end();
+            })
+    }).catch(error => {
+        logging.error(NAMESPACE, error.message, error);
+        return res.status(500).json({
+            error
+        })
+        
+    });
+
+   
+};
+
+export default { getEsquemaByIdTreballadorAndName, insertEsquemaRow, updateEsquemaRow, estatEliminatEsquemaRow, generarGuardiesCSV, generarGuardiesEsquema };
 
 
 function getDiumenges(diaInici: string, diaFi: string) {
