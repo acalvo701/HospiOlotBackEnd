@@ -4,9 +4,9 @@ import TokenController from "../../Controllers/GeneralUse/TokenController";
 
 const router = express.Router();
 
-router.get('/getAllTorns',TokenController.validateToken,TornController.getAllTorns);
-router.post('/insertTorn',TokenController.validateToken,TornController.insertTorn);
-router.post('/updateEstat',TokenController.validateToken,TornController.updateEstat);
+router.get('/getAllTorns',TokenController.validateTokenAdmin,TornController.getAllTorns);
+router.post('/insertTorn',TokenController.validateTokenAdmin,TornController.insertTorn);
+router.post('/updateEstat',TokenController.validateTokenAdmin,TornController.updateEstat);
 
 
 module.exports = router;

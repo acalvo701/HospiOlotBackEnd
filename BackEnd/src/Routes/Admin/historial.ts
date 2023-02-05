@@ -4,7 +4,7 @@ import TokenController from "../../Controllers/GeneralUse/TokenController";
 
 const router = express.Router();
 
-router.post('/addHistorial',TokenController.validateToken,HistorialController.addHistorial);
+router.post('/addHistorial',TokenController.validateTokenAdmin,HistorialController.addHistorial);
 
 
 module.exports = router;
