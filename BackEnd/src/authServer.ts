@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 
 const guardiaAdminRoutes = require("./Routes/Admin/guardiaAdmin.ts");
+const guardiaAdminTreballadorRoutes = require("./Routes/Admin/guardiaAdminTreballadorController.ts");
 const guardiaRoutes = require("./Routes/GeneralUse/guardia.ts");
 const treballadorRoutes = require("./Routes/Admin/treballador.ts");
 const guardiaModelRoutes = require("./Routes/Admin/guardiamodel.ts");
@@ -18,6 +19,7 @@ const tokenRoutes = require("./Routes/GeneralUse/token.ts");
 app.use(cors());
 app.use(express.json());
 app.use("/guardiaAdmin",guardiaAdminRoutes);
+app.use("/guardiaAdminTreballador",guardiaAdminTreballadorRoutes);
 app.use("/guardia", guardiaRoutes);
 app.use("/treballador", treballadorRoutes);
 app.use("/guardiamodel", guardiaModelRoutes);

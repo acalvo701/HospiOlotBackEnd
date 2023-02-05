@@ -12,10 +12,10 @@ const getGuardiesByDayAdmin = async (req: Request, res: Response, next: NextFunc
 
     Connect().then((connection) => {
         let values = new Array<any>;
-        let query = `SELECT id,categoria,guardia.unitat,torn,dia,numeroPlaces,guardiatreballador.idGuardia,guardiatreballador.idTreballador,guardiatreballador.estat as 'estatTreballador'
-        FROM guardia LEFT JOIN guardiatreballador ON guardiatreballador.idGuardia = guardia.id 
-        WHERE guardia.unitat IN (SELECT rol.unitat FROM rol WHERE rol.idTreballador = ?) AND   dia=? AND guardia.estat = 'ACTIU'
-        and (guardiatreballador.estat ='PENDENT' OR isnull(guardiatreballador.estat))
+        let query = `SELECT guardia.id,guardia.categoria,guardia.unitat,torn,dia,numeroPlaces,guardiatreballador.idGuardia,guardiatreballador.idTreballador,treballador.nom,guardiatreballador.estat as 'estatTreballador'
+        FROM guardia LEFT JOIN guardiatreballador ON guardiatreballador.idGuardia = guardia.id LEFT JOIN treballador ON treballador.id = guardiatreballador.idTreballador 
+        WHERE guardia.unitat IN (SELECT rol.unitat FROM rol WHERE rol.idTreballador = ?) AND   dia = ? AND guardia.estat = 'ACTIU'
+        AND (guardiatreballador.estat NOT IN ('CANCELADA') OR isnull(guardiatreballador.estat))
         `;
         values['0'] = idTreballador;
         values['1'] = data;

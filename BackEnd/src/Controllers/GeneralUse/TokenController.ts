@@ -26,7 +26,7 @@ const login = (async (req: Request, res: Response, next: NextFunction) => {
 
 
                 if (treballador === null || treballador === undefined || (Array.isArray(treballador) && treballador.length === 0)) {
-                    res.status(404).send("Usuari o password no vàlid")
+                    res.status(401).send("Usuari o password no vàlid")
                 } else {
                     console.log(password);
                     if (await bcrypt.compare(password, treballador[0]['password'])) {
