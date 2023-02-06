@@ -13,6 +13,5 @@ router.get('/getGuardiesByDayFromTreballador',TokenController.validateToken,Guar
 router.post('/cancelGuardia',TokenController.validateToken,GuardiaTreballadorController.cancelGuardia);
 router.post('/bookGuardia',TokenController.validateToken,GuardiaTreballadorController.bookGuardia);
 router.post('/updateEstat',TokenController.validateToken,GuardiaTreballadorController.updateEstat);
-router.post('/insertarGuardiaTreballadorAdmin',TokenController.validateToken,GuardiaTreballadorController.insertarGuardiaTreballadorAdmin);
 
 module.exports = router;
